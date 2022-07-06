@@ -12,13 +12,19 @@
   "author": "chickenFloor( )",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "helmet": "^5.1.0",
+    "http-status": "^1.5.2",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.3",
     "mongoose": "^6.4.1",
     "morgan": "^1.10.0",
-    "rotating-file-stream": "^3.0.4"
+    "rotating-file-stream": "^3.0.4",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
