@@ -11,7 +11,7 @@ class UserService {
         if (await User.isEmailTaken(data.email)) {
             throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
         }
-        const newUser = await new User(data)
+        const newUser = new User(data)
         const saveUser = await newUser.save()
 
         return saveUser

@@ -1,21 +1,30 @@
 const httpStatus = require('http-status')
-const userService = require('../services/User.Service')
+const UserService = require('../services/User.Service')
+const TokenService = require('../services/Token.Service')
+const { errorResponse, dataResponse } = require('../../utils/response')
 
 class AuthController {
     // POST auth/login
     async login(req, res) {
         const { email, password } = req.body
         try {
-            const user = await userService.getUserByEmailAndPassword(
+            const user = await UserService.getUserByEmailAndPassword(
                 email,
                 password
             )
-            res.status(httpStatus.OK).json(user)
+            const tokens = await TokenService.generateAuthTokens(user)
+            res.setHeader('Authorization-access', tokens.access.token)
+            res.setHeader('Authorization-access-expires', tokens.access.expires)
+            res.setHeader('Authorization-refresh', tokens.refresh.token)
+            res.setHeader(
+                'Authorization-refresh-expires',
+                tokens.refresh.expires
+            )
+            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, user))
         } catch (error) {
-            res.status(error.statusCode).json({
-                code: error.statusCode,
-                error: error.message,
-            })
+            res.status(error.statusCode).json(
+                errorResponse(error.statusCode, error.message)
+            )
         }
     }
 }

@@ -5,11 +5,14 @@ const helmet = require('helmet')
 const cors = require('cors')
 const rfs = require('rotating-file-stream')
 const path = require('path')
-
-const route = require('./src/routes')
-const db = require('./src/configs/db')
+const passport = require('passport')
 
 dotenv.config()
+
+const db = require('./src/configs/db')
+const route = require('./src/routes')
+const { jwtStrategy } = require('./src/app/middlewares/passport')
+
 const app = express()
 db.connectDB()
 
@@ -29,6 +32,8 @@ app.use(
         ? morgan('combined', { stream: accessLogStream })
         : morgan('dev')
 )
+passport.use('jwt', jwtStrategy)
+app.use(passport.initialize())
 
 app.use('/api', route)
 
