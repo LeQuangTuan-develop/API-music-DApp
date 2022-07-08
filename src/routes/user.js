@@ -1,28 +1,28 @@
 const express = require('express')
 const router = express.Router()
-const userController = require('../app/controllers/User.controller')
+const UserController = require('../app/controllers/User.controller')
 const passport = require('passport')
 
 router.get(
     '/',
     passport.authenticate('jwt', { session: false }),
-    userController.index
+    UserController.index
 )
 router.get(
     '/:id',
     passport.authenticate('jwt', { session: false }),
-    userController.show
+    UserController.show
 )
-router.post('/', userController.create)
+router.post('/', UserController.create)
 router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),
-    userController.update
+    UserController.update
 )
 router.delete(
     '/:id',
     passport.authenticate('jwt', { session: false }),
-    userController.delete
+    UserController.delete
 )
 
 module.exports = router

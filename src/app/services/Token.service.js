@@ -5,7 +5,6 @@ const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const { Token } = require('../models')
 const { tokenTypes } = require('../../configs/tokens')
-const AuthService = require('./Auth.service')
 class TokenService {
     async generateAuthTokens(user) {
         const accessTokenExpires = moment().add(

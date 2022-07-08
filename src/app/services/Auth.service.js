@@ -22,6 +22,14 @@ class AuthService {
         await refreshTokenDoc.remove()
         return true
     }
+
+    responseSetHeader(res, tokens) {
+        res.setHeader('Authorization-access', tokens.access.token)
+        res.setHeader('Authorization-access-expires', tokens.access.expires)
+        res.setHeader('Authorization-refresh', tokens.refresh.token)
+        res.setHeader('Authorization-refresh-expires', tokens.refresh.expires)
+        return res
+    }
 }
 
 module.exports = new AuthService()
