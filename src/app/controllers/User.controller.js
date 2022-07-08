@@ -18,8 +18,10 @@ class UserController {
     // GET users/:id
     async show(req, res) {
         try {
-            const user = await UserService.getUserById(req.params.id)
-            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, user))
+            // const user = await UserService.getUserById(req.params.id)
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, req.user)
+            )
         } catch (error) {
             res.status(error.statusCode).json(
                 errorResponse(error.statusCode, error.message)

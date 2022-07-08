@@ -63,17 +63,6 @@ class UserService {
 
         return deleteUser
     }
-
-    async getUserByEmailAndPassword(email, password) {
-        const user = await User.findOne({ email })
-        if (!user || !(await user.isPasswordMatch(password))) {
-            throw new ApiError(
-                httpStatus.UNAUTHORIZED,
-                'Incorrect email or password'
-            )
-        }
-        return user
-    }
 }
 
 module.exports = new UserService()

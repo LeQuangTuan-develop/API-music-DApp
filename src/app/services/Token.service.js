@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
+const ApiError = require('../../utils/apiError')
+const httpStatus = require('http-status')
 const { Token } = require('../models')
-
 const { tokenTypes } = require('../../configs/tokens')
-
+const AuthService = require('./Auth.service')
 class TokenService {
     async generateAuthTokens(user) {
         const accessTokenExpires = moment().add(
@@ -66,12 +67,14 @@ class TokenService {
         return tokenDoc
     }
 
-    async getTokenByRefresh(refreshToken, isBlackListed) {
+    async getTokenByRefresh(refreshToken) {
         const refreshTokenDoc = await Token.findOne({
             token: refreshToken,
             type: tokenTypes.REFRESH,
-            blacklisted: isBlackListed,
         })
+        if (!refreshTokenDoc) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Forbidden')
+        }
         return refreshTokenDoc
     }
 }

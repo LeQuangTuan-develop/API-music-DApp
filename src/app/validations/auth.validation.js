@@ -9,16 +9,15 @@ const loginSchema = {
     }),
 }
 
-const logoutSchema = {
+const refreshSchema = {
     body: Joi.object().keys({
-        accessToken: Joi.string().required(),
         refreshToken: Joi.string().required(),
     }),
 }
 
 const registerSchema = {
     body: Joi.object().keys({
-        displayName: Joi.string().required(),
+        fullname: Joi.string().required(),
         email: Joi.string().required().email(),
         password: Joi.string().required().custom(password),
     }),
@@ -26,6 +25,6 @@ const registerSchema = {
 
 module.exports = {
     loginSchema,
-    logoutSchema,
+    refreshSchema,
     registerSchema,
 }
