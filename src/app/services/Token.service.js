@@ -55,13 +55,13 @@ class TokenService {
         return jwt.sign(payload, secret)
     }
 
-    async saveToken(token, userId, expires, type, blacklisted = false) {
+    async saveToken(token, userId, expires, type, blackListed = false) {
         const tokenDoc = await Token.create({
             token,
-            user: userId,
-            expires: expires.toDate(),
+            userId: userId,
+            expiredDate: expires.toDate(),
             type,
-            blacklisted,
+            blackListed,
         })
         return tokenDoc
     }

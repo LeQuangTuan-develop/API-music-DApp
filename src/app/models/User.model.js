@@ -47,19 +47,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(128),
                 validate: {
                     len: [8, 128],
-                    is: {
-                        args: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
-                        msg: `Your password must be contain at least one digit, one lower case
-                                , one upper case and least 8 from the mentioned characters! `,
-                    },
-                    /*
-                    /^
-                        (?=.*\d)          // should contain at least one digit
-                        (?=.*[a-z])       // should contain at least one lower case
-                        (?=.*[A-Z])       // should contain at least one upper case
-                        [a-zA-Z0-9]{8,}   // should contain at least 8 from the mentioned characters
-                    $/
-                */
                 },
             },
             fullName: {

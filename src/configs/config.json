@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "sa",
-    "password": "2892002hH",
-    "database": "test",
+    "username": "root",
+    "password": null,
+    "database": "dapp_music",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
