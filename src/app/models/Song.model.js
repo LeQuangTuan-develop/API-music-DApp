@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             // Song -> User
             Song.belongsTo(models.User, {
                 foreignKey: 'userId',
-                as: 'songData',
             })
             // Song -> comment
             Song.hasMany(models.Comment, {
@@ -17,12 +16,10 @@ module.exports = (sequelize, DataTypes) => {
             // Song -> genre
             Song.belongsTo(models.Genre, {
                 foreignKey: 'genreId',
-                as: 'genreData',
             })
             // Song -> Song Category
             Song.belongsTo(models.SongCategory, {
                 foreignKey: 'categoryId',
-                as: 'categoryData',
             })
             // Song -> PlayListDetail
             Song.hasMany(models.PlayListDetail, {

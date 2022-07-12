@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             // playlist -> user
             Playlist.belongsTo(models.User, {
                 foreignKey: 'userId',
-                as: 'playListData',
             })
             // playlist -> play list detail
             Playlist.hasMany(models.PlayListDetail, {

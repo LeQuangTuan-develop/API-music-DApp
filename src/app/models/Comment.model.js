@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
             // comment -> song
             Comment.belongsTo(models.Song, {
                 foreignKey: 'songId',
-                as: 'commentData',
             })
         }
     }

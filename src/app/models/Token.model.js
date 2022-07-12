@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             // foreign key
             Token.belongsTo(models.User, {
                 foreignKey: 'userId',
-                as: 'tokenData',
             })
         }
     }
