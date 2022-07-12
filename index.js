@@ -10,8 +10,7 @@ const compression = require('compression')
 
 dotenv.config()
 
-const db = require('./models/index')
-const db = require('./src/configs/db')
+const db = require('./src/app/models/index')
 const route = require('./src/routes')
 const { jwtStrategy } = require('./src/app/middlewares/passport')
 const { errorConverter, errorHandler } = require('./src/app/middlewares/error')
@@ -50,7 +49,6 @@ passport.use('jwt', jwtStrategy)
 app.use(passport.initialize())
 
 app.use('/api', route)
-
 
 // convert error to ApiError, if needed
 app.use(errorConverter)

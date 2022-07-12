@@ -1,27 +1,27 @@
 const httpStatus = require('http-status')
+const bcrypt = require('bcryptjs')
 const { User } = require('../models')
 const ApiError = require('../../utils/apiError')
 const { checkValidObjectId } = require('../../utils/helper')
 class UserService {
     async getAllUsers() {
-        return await User.find()
+        console.log('run here')
+        return await User.findAll()
     }
 
     async createUser(data) {
-        if (await User.isEmailTaken(data.email)) {
+        if (await User.findOne({ where: { email: data.email } })) {
             throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
         }
         const newUser = new User(data)
+        newUser.password = await bcrypt.hash(newUser.password, 10)
         const saveUser = await newUser.save()
 
         return saveUser
     }
 
     async getUserById(id) {
-        if (!checkValidObjectId(id)) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid ID user')
-        }
-        const user = await User.findById(id)
+        const user = await User.findByPk(id)
         if (!user)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
@@ -32,10 +32,7 @@ class UserService {
     }
 
     async updateUser(id, body) {
-        if (!checkValidObjectId(id)) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid ID user')
-        }
-        const user = await User.findById(id)
+        const user = await User.findByPk(id)
         if (!user)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
@@ -51,10 +48,11 @@ class UserService {
     }
 
     async deleteUser(id) {
-        if (!checkValidObjectId(id)) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid ID user')
-        }
-        const deleteUser = await User.findOneAndRemove({ _id: id })
+        const deleteUser = await User.destroy({
+            where: {
+                id: id,
+            },
+        })
         if (!deleteUser)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,

@@ -2,7 +2,7 @@ const Joi = require('joi')
 const httpStatus = require('http-status')
 
 const pickKeys = require('../../utils/pickKeys')
-const { errorResponse } = require('../../utils/response')
+const ApiError = require('../../utils/apiError')
 
 module.exports = (schema) => (req, res, next) => {
     const validSchema = pickKeys(schema, ['params', 'query', 'body'])
@@ -13,9 +13,7 @@ module.exports = (schema) => (req, res, next) => {
 
     if (error) {
         const errorMessage = error.details.map((details) => details.message)
-        return res
-            .status(httpStatus.BAD_REQUEST)
-            .json(errorResponse(httpStatus.BAD_REQUEST, errorMessage))
+        throw new ApiError(httpStatus.BAD_REQUEST, errorMessage)
     }
     Object.assign(req, value)
     return next()
