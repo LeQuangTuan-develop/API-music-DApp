@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const connectDB = async () => {
     try {
         await mongoose.connect(
-            `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@dappcv.zn9felp.mongodb.net/DappCV?retryWrites=true&w=majority`,
+            `mongodb+srv://${process.env.DB_USER1}:${process.env.DB_PASS1}@dappcv.zn9felp.mongodb.net/DappCV?retryWrites=true&w=majority`,
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,

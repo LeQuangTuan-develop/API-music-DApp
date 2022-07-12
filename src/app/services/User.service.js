@@ -11,7 +11,7 @@ class UserService {
         if (await User.isEmailTaken(data.email)) {
             throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
         }
-        const newUser = await new User(data)
+        const newUser = new User(data)
         const saveUser = await newUser.save()
 
         return saveUser
@@ -62,17 +62,6 @@ class UserService {
             )
 
         return deleteUser
-    }
-
-    async getUserByEmailAndPassword(email, password) {
-        const user = await User.findOne({ email })
-        if (!user || !(await user.isPasswordMatch(password))) {
-            throw new ApiError(
-                httpStatus.UNAUTHORIZED,
-                'Incorrect email or password'
-            )
-        }
-        return user
     }
 }
 
