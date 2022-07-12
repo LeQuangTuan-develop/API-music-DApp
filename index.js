@@ -5,6 +5,9 @@ const helmet = require('helmet')
 const cors = require('cors')
 const rfs = require('rotating-file-stream')
 const path = require('path')
+
+const route = require('./src/routes')
+const db = require('./models/index')
 const passport = require('passport')
 const compression = require('compression')
 
