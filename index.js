@@ -10,13 +10,13 @@ const compression = require('compression')
 
 dotenv.config()
 
+const db = require('./models/index')
 const db = require('./src/configs/db')
 const route = require('./src/routes')
 const { jwtStrategy } = require('./src/app/middlewares/passport')
 const { errorConverter, errorHandler } = require('./src/app/middlewares/error')
 
 const app = express()
-db.connectDB()
 
 const port = process.env.PORT || 4000
 const isProduction = process.env.NODE_ENV === 'production'
@@ -51,9 +51,6 @@ app.use(passport.initialize())
 
 app.use('/api', route)
 
-app.get('/', function (req, res, next) {
-    res.json('Chicken Floor say ò ó o o')
-})
 
 // convert error to ApiError, if needed
 app.use(errorConverter)
