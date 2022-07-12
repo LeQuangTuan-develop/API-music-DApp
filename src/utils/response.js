@@ -1,10 +1,3 @@
-const errorResponse = (code, message) => {
-    return {
-        code,
-        message,
-    }
-}
-
 const dataResponse = (code, data, message) => {
     return {
         code,
@@ -14,6 +7,5 @@ const dataResponse = (code, data, message) => {
 }
 
 module.exports = {
-    errorResponse,
     dataResponse,
 }

@@ -1,34 +1,32 @@
 const httpStatus = require('http-status')
 const UserService = require('../services/User.service')
-const { errorResponse, dataResponse } = require('../../utils/response')
+const { dataResponse } = require('../../utils/response')
 
 class UserController {
     // GET users
-    async index(req, res) {
+    async index(req, res, next) {
         try {
             const users = await UserService.getAllUsers()
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, users))
         } catch (error) {
-            res.status(error.statusCode).json(
-                errorResponse(error.statusCode, error.message)
-            )
+            next(error)
         }
     }
 
     // GET users/:id
-    async show(req, res) {
+    async show(req, res, next) {
         try {
-            const user = await UserService.getUserById(req.params.id)
-            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, user))
-        } catch (error) {
-            res.status(error.statusCode).json(
-                errorResponse(error.statusCode, error.message)
+            // const user = await UserService.getUserById(req.params.id)
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, req.user)
             )
+        } catch (error) {
+            next(error)
         }
     }
 
     // POST users/:id
-    async create(req, res) {
+    async create(req, res, next) {
         try {
             const saveUser = await UserService.createUser(req.body)
             res.status(httpStatus.CREATED).json(
@@ -39,14 +37,12 @@ class UserController {
                 )
             )
         } catch (error) {
-            res.status(error.statusCode).json(
-                errorResponse(error.statusCode, error.message)
-            )
+            next(error)
         }
     }
 
     // PUT users/:id
-    async update(req, res) {
+    async update(req, res, next) {
         try {
             const id = req.params.id
             const updateUser = await UserService.updateUser(id, req.body)
@@ -58,14 +54,12 @@ class UserController {
                 )
             )
         } catch (error) {
-            res.status(error.statusCode).json(
-                errorResponse(error.statusCode, error.message)
-            )
+            next(error)
         }
     }
 
     // DELETE users/:id
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
             const id = req.params.id
             const deleteUser = await UserService.deleteUser(id)
@@ -77,9 +71,7 @@ class UserController {
                 )
             )
         } catch (error) {
-            res.status(error.statusCode).json(
-                errorResponse(error.statusCode, error.message)
-            )
+            next(error)
         }
     }
 }
