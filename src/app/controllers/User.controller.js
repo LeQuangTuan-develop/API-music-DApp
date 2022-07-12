@@ -74,6 +74,17 @@ class UserController {
             next(error)
         }
     }
+
+    async test(req, res, next) {
+        try {
+            const users = await UserService.test()
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, users, 'Get all user successfully')
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController()

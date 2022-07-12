@@ -5,16 +5,22 @@ module.exports = (sequelize, DataTypes) => {
     class Song extends Model {
         static associate(models) {
             // Song -> User
-            Song.belongsTo(models.User, { foreignKey: 'userId' })
+            Song.belongsTo(models.User, {
+                foreignKey: 'userId',
+            })
             // Song -> comment
             Song.hasMany(models.Comment, {
                 foreignKey: 'songId',
                 as: 'commentData',
             })
             // Song -> genre
-            Song.belongsTo(models.Genre, { foreignKey: 'genreId' })
+            Song.belongsTo(models.Genre, {
+                foreignKey: 'genreId',
+            })
             // Song -> Song Category
-            Song.belongsTo(models.SongCategory, { foreignKey: 'categoryId' })
+            Song.belongsTo(models.SongCategory, {
+                foreignKey: 'categoryId',
+            })
             // Song -> PlayListDetail
             Song.hasMany(models.PlayListDetail, {
                 foreignKey: 'songId',
