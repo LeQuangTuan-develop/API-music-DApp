@@ -6,12 +6,14 @@ const cors = require('cors')
 const rfs = require('rotating-file-stream')
 const path = require('path')
 
-
 const route = require('./src/routes')
 const db = require('./models/index')
+const passport = require('passport')
+const compression = require('compression')
 
 dotenv.config()
 
+const db = require('./models/index')
 const db = require('./src/configs/db')
 const route = require('./src/routes')
 const { jwtStrategy } = require('./src/app/middlewares/passport')
