@@ -5,10 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     class PlayListDetail extends Model {
         static associate(models) {
             // foreign key
-            PlayListDetail.belongsTo(models.Song, { foreignKey: 'songId' })
+            PlayListDetail.belongsTo(models.Song, {
+                foreignKey: 'songId',
+                as: 'playListDetailData',
+            })
             // play list detail -> playlist
             PlayListDetail.belongsTo(models.Playlist, {
                 foreignKey: 'playListId',
+                as: 'playlistData',
             })
         }
     }

@@ -1,10 +1,10 @@
-const { User, Song, Token } = require('../model')
+const { User, Song, Token } = require('../models')
 
 class UserRepository {
-    async findUserById() {
+    async test() {
         const users = await User.findAll({
             where: {
-                isActive: true,
+                gender: 1,
             },
             attributes: {
                 exclude: ['createdAt', 'updatedAt'],
@@ -12,7 +12,7 @@ class UserRepository {
             include: [
                 {
                     model: Song,
-                    as: 'songs',
+                    as: 'songData',
                     attributes: {
                         exclude: ['createdAt', 'updatedAt', 'deletedAt'],
                     },
@@ -22,7 +22,7 @@ class UserRepository {
                 },
                 {
                     model: Token,
-                    as: 'tokens',
+                    as: 'tokenData',
                 },
             ],
             order: [['username', 'asc']],

@@ -2,7 +2,8 @@ const httpStatus = require('http-status')
 const bcrypt = require('bcryptjs')
 const { User } = require('../models')
 const ApiError = require('../../utils/apiError')
-const { checkValidObjectId } = require('../../utils/helper')
+
+const userRepository = require('../repositories/user.repositoty')
 class UserService {
     async getAllUsers() {
         console.log('run here')
@@ -60,6 +61,11 @@ class UserService {
             )
 
         return deleteUser
+    }
+
+    async test() {
+        const users = await userRepository.test()
+        return users
     }
 }
 
