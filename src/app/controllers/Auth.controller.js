@@ -35,8 +35,8 @@ class AuthController {
     async register(req, res, next) {
         try {
             const user = await UserService.createUser(req.body)
-            const tokens = await TokenService.generateAuthTokens(user)
-            res = AuthService.responseSetHeader(res, tokens)
+            // const tokens = await TokenService.generateAuthTokens(user)
+            // res = AuthService.responseSetHeader(res, tokens)
             res.status(httpStatus.CREATED).json(
                 dataResponse(httpStatus.CREATED, user)
             )

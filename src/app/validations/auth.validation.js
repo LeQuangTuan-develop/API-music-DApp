@@ -17,7 +17,7 @@ const refreshSchema = {
 
 const registerSchema = {
     body: Joi.object().keys({
-        fullname: Joi.string().required(),
+        fullName: Joi.string().required(),
         email: Joi.string().required().email(),
         password: Joi.string().required().custom(password),
     }),
