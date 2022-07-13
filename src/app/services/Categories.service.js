@@ -48,6 +48,17 @@ class CategoriesService {
         return deleteCate
     }
 
+    async getDetail(id) {
+        const cateSong = await SongCategory.findByPk(id)
+        if (!cateSong)
+            throw new ApiError(
+                httpStatus.BAD_REQUEST,
+                'This cate does not exist'
+            )
+
+        return cateSong
+    }
+
 }
 
 

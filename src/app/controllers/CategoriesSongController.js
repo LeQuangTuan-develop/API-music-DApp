@@ -12,6 +12,7 @@ class CategoriesSongController{
         }
     }
 
+    
     async create(req, res, next) {
         try {
             const saveCateSong = await CategoriesService.createCateSong(req.body)
@@ -54,6 +55,18 @@ class CategoriesSongController{
                     deleteCate,
                     'Delete cate successfully'
                 )
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async detail(req, res, next) {
+        try {
+            const id = req.params.id;
+            const detail = await CategoriesService.getDetail(id)
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, detail)
             )
         } catch (error) {
             next(error)

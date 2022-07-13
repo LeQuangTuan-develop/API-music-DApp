@@ -13,6 +13,12 @@ router.post('/create',
 passport.authenticate('jwt', { session: false }),
 CategoriesSongController.create)
 
+router.get(
+    '/:id',
+    // passport.authenticate('jwt', { session: false }),
+    CategoriesSongController.detail
+)
+
 router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),
