@@ -15,7 +15,7 @@ CategoriesSongController.create)
 
 router.get(
     '/:id',
-    // passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     CategoriesSongController.detail
 )
 
