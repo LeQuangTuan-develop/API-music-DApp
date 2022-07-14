@@ -7,6 +7,7 @@ const validate = require('../app/middlewares/validate')
 
 const router = express.Router()
 
+// POST api/auth/login
 router.post(
     '/login',
     validate(authValidation.loginSchema),
@@ -18,6 +19,7 @@ router.post(
     passport.authenticate('jwt', { session: false }),
     AuthController.logout
 )
+// POST api/auth/register
 router.post(
     '/register',
     validate(authValidation.registerSchema),
@@ -26,7 +28,6 @@ router.post(
 router.post(
     '/refresh',
     validate(authValidation.refreshSchema),
-    passport.authenticate('jwt', { session: false }),
     AuthController.refreshTokens
 )
 
