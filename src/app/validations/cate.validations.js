@@ -9,10 +9,12 @@ const createCateSchema = {
     }),
 }
 
+
 const updateCateSchema = {
     body: Joi.object().keys({
         name: Joi.string().required().custom(name),
         imageUrl: Joi.string().required(),
+        
     }),
 }
 
