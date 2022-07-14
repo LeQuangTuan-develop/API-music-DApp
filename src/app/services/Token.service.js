@@ -5,6 +5,7 @@ const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const { Token } = require('../models')
 const { tokenTypes } = require('../../configs/tokens')
+const { Op } = require('sequelize')
 class TokenService {
     async generateAuthTokens(user) {
         const accessTokenExpires = moment().add(
@@ -12,7 +13,7 @@ class TokenService {
             'minutes'
         )
         const accessToken = this.generateToken(
-            user._id,
+            user.username,
             accessTokenExpires,
             tokenTypes.ACCESS
         )
@@ -21,28 +22,20 @@ class TokenService {
             process.env.PASSPORT_JWT_REFRESH_EXPIRED / 60,
             'minutes'
         )
-        const refreshToken = this.generateToken(
-            user._id,
+        let refreshToken = this.generateToken(
+            user.username,
             refreshTokenExpires,
             tokenTypes.REFRESH
-        )
-        await this.saveToken(
-            refreshToken,
-            user._id,
-            refreshTokenExpires,
-            tokenTypes.REFRESH
-        )
+        )   
 
-        return {
-            access: {
-                token: accessToken,
-                expires: accessTokenExpires.toDate(),
-            },
-            refresh: {
-                token: refreshToken,
-                expires: refreshTokenExpires.toDate(),
-            },
+        let currentToken = await this.getRefreshTokenByUserId(user._id);
+        if (!(currentToken)) {
+            await this.updateRefreshTokenByUserId(user._id, refreshToken)
+        } else {
+            refreshToken = currentToken
         }
+
+        return { accessToken, refreshToken }
     }
 
     generateToken(userId, expires, type, secret = process.env.PASSPORT_JWT) {
@@ -55,26 +48,48 @@ class TokenService {
         return jwt.sign(payload, secret)
     }
 
-    async saveToken(token, userId, expires, type, blackListed = false) {
+    async updateRefreshTokenByUserId(userId, refreshToken) {
+        return await Token.update(
+            { token: refreshToken },
+            {
+                where: {
+                    [Op.and]: [
+                        { userId: userId },
+                        { type: tokenTypes.REFRESH },
+                    ],
+                },
+            }
+        )
+    }
+
+    async saveToken(token, userId, type, blackListed = false) {
         const tokenDoc = await Token.create({
             token,
             userId: userId,
-            expiredDate: expires.toDate(),
             type,
             blackListed,
         })
         return tokenDoc
     }
 
-    async getTokenByRefresh(refreshToken) {
+    async getRefreshTokenByUserId(userId) {
         const refreshTokenDoc = await Token.findOne({
-            token: refreshToken,
-            type: tokenTypes.REFRESH,
+            where: {
+                [Op.and]: [{ userId: userId}, {type: tokenTypes.REFRESH }],
+            },
         })
-        if (!refreshTokenDoc) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Forbidden')
+        return refreshTokenDoc.token
+    }
+
+    // decode token expired to create new access token
+    async decodeToken(token, secretKey = process.env.PASSPORT_JWT) {
+        try {
+            return jwt.verify(token, secretKey, {
+                ignoreExpiration: true,
+            })
+        } catch (error) {
+            return null
         }
-        return refreshTokenDoc
     }
 }
 

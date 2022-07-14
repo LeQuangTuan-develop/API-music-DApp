@@ -2,7 +2,9 @@ const httpStatus = require('http-status')
 const bcrypt = require('bcryptjs')
 const { User } = require('../models')
 const ApiError = require('../../utils/apiError')
-const { checkValidObjectId } = require('../../utils/helper')
+
+const userRepository = require('../repositories/user.repositoty')
+const { Op } = require('sequelize')
 class UserService {
     async getAllUsers() {
         console.log('run here')
@@ -10,18 +12,31 @@ class UserService {
     }
 
     async createUser(data) {
-        if (await User.findOne({ where: { email: data.email } })) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
+        let user = await User.findOne({
+            where: {
+                [Op.or]: [{ username: data.username }, { email: data.email }],
+            },
+        })
+        if (!user) {
+            data.password = await bcrypt.hash(data.password, 10)
+            return await new User(data).save()
+        } else if (user && user.username == data.username) {
+            throw new ApiError(
+                httpStatus.CONFLICT,
+                'Your username already exists! Please choose another username...'
+            )
+        } else {
+            throw new ApiError(
+                httpStatus.CONFLICT,
+                'Your email has been used ! Please choose another email...'
+            )
         }
-        const newUser = new User(data)
-        newUser.password = await bcrypt.hash(newUser.password, 10)
-        const saveUser = await newUser.save()
-
-        return saveUser
     }
 
-    async getUserById(id) {
-        const user = await User.findByPk(id)
+    async getUserByUsername(username) {
+        const user = await User.findOne({
+            where: { username: username },
+        })
         if (!user)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
@@ -60,6 +75,11 @@ class UserService {
             )
 
         return deleteUser
+    }
+
+    async test() {
+        const users = await userRepository.test()
+        return users
     }
 }
 
