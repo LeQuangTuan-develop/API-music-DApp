@@ -10,6 +10,15 @@ const password = (value, helpers) => {
     return value
 }
 
+const name = (value, helpers) =>{
+    if(value.match(/[a-zA-Z]/)){
+        return helpers.message(
+            'Name cannot contains specials char'
+        )
+    }
+}
+
 module.exports = {
     password,
+    name
 }

@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const CategoriesSongController = require('../app/controllers/CategoriesSongController')
 const passport = require('passport')
+const cateValidate = require('../app/validations/cate.validations')
+const validate = require('../app/middlewares/validate')
 
 router.get(
     '/',
@@ -11,6 +13,7 @@ router.get(
 
 router.post('/create', 
 passport.authenticate('jwt', { session: false }),
+validate(cateValidate.createCateSchema),
 CategoriesSongController.create)
 
 router.get(
@@ -22,6 +25,7 @@ router.get(
 router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),
+    validate(cateValidate.updateCateSchema),
     CategoriesSongController.update
 )
 
