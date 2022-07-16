@@ -3,7 +3,7 @@ const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt')
 const { tokenTypes } = require('../../configs/tokens')
 
 const { User } = require('../models')
-const UserService = require('../services/User.Service')
+const UserService = require('../services/User.service')
 
 const jwtOptions = {
     secretOrKey: process.env.PASSPORT_JWT,

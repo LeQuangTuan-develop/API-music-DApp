@@ -27,6 +27,8 @@
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
     "rotating-file-stream": "^3.0.4",
     "sequelize": "^6.21.3",
     "validator": "^13.7.0"

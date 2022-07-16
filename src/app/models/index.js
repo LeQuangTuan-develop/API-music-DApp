@@ -8,15 +8,34 @@ const env = process.env.NODE_ENV || 'development'
 const config = require(__dirname + '/../../configs/config.json')[env]
 const db = {}
 
+const customizeConfig = {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_TYPE,
+    logging: false,
+    query: {
+        raw: true,
+    },
+    timezone: '+07:00',
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false,
+        },
+    },
+}
+
 let sequelize
 if (config.use_env_variable) {
-    sequelize = new Sequelize(process.env[config.use_env_variable], config)
+    sequelize = new Sequelize(
+        process.env[config.use_env_variable],
+        customizeConfig
+    )
 } else {
     sequelize = new Sequelize(
-        config.database,
-        config.username,
-        config.password,
-        config
+        process.env.DB_NAME,
+        process.env.DB_USER,
+        process.env.DB_PASS,
+        customizeConfig
     )
 }
 

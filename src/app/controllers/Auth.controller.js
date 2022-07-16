@@ -1,7 +1,7 @@
 const httpStatus = require('http-status')
-const AuthService = require('../services/Auth.Service')
-const TokenService = require('../services/Token.Service')
-const UserService = require('../services/User.Service')
+const AuthService = require('../services/Auth.service')
+const TokenService = require('../services/Token.service')
+const UserService = require('../services/User.service')
 const { dataResponse } = require('../../utils/response')
 const { tokenTypes } = require('../../configs/tokens')
 const moment = require('moment')
@@ -39,7 +39,7 @@ class AuthController {
     async register(req, res, next) {
         try {
             const user = await UserService.createUser(req.body)
-            if(user){
+            if (user) {
                 await TokenService.saveToken(null, user._id, tokenTypes.REFRESH)
             }
             res.status(httpStatus.CREATED).json(
@@ -57,35 +57,56 @@ class AuthController {
     // POST auth/refresh
     async refreshTokens(req, res, next) {
         try {
-            const authHeader = req.headers.authorization;
-            const accessTokenFromHeader = authHeader.split(' ')[1];
+            const authHeader = req.headers.authorization
+            const accessTokenFromHeader = authHeader.split(' ')[1]
             const refreshTokenFromBody = req.body.refreshToken
 
-            const decoded = await TokenService.decodeToken( accessTokenFromHeader)
-            if(!decoded){
+            const decoded = await TokenService.decodeToken(
+                accessTokenFromHeader
+            )
+            if (!decoded) {
                 res.status(httpStatus.UNAUTHORIZED).json(
-                    dataResponse(httpStatus.UNAUTHORIZED, null, 'Access Token invalid!')
+                    dataResponse(
+                        httpStatus.UNAUTHORIZED,
+                        null,
+                        'Access Token invalid!'
+                    )
                 )
-            } 
+            }
 
-            const account = decoded.sub;
+            const account = decoded.sub
 
-            const user = await UserService.getUserByUsername(account);
+            const user = await UserService.getUserByUsername(account)
 
-            if(refreshTokenFromBody !== await TokenService.getRefreshTokenByUserId(user._id)){
+            if (
+                refreshTokenFromBody !==
+                (await TokenService.getRefreshTokenByUserId(user._id))
+            ) {
                 res.status(httpStatus.UNAUTHORIZED).json(
-                    dataResponse(httpStatus.UNAUTHORIZED, null, 'Refresh Token invalid!')
+                    dataResponse(
+                        httpStatus.UNAUTHORIZED,
+                        null,
+                        'Refresh Token invalid!'
+                    )
                 )
             }
             const accessTokenExpires = moment().add(
                 process.env.PASSPORT_JWT_ACCESS_EXPIRED / 60,
                 'minutes'
             )
-            
-            const accessToken = TokenService.generateToken( user.username, accessTokenExpires, tokenTypes.ACCESS )
+
+            const accessToken = TokenService.generateToken(
+                user.username,
+                accessTokenExpires,
+                tokenTypes.ACCESS
+            )
             res.setHeader('Authorization-access', accessToken)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, accessToken, 'Reset access token successfully!')
+                dataResponse(
+                    httpStatus.OK,
+                    accessToken,
+                    'Reset access token successfully!'
+                )
             )
         } catch (error) {
             next(error)

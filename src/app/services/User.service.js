@@ -55,7 +55,6 @@ class UserService {
             )
 
         Object.keys(body).forEach((key) => {
-            console.log(body[key])
             user[key] = body[key]
         })
         await user.save()
