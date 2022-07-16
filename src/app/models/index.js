@@ -8,6 +8,16 @@ const env = process.env.NODE_ENV || 'development'
 const config = require(__dirname + '/../../configs/config.json')[env]
 const db = {}
 
+const useSSL =
+    process.env.DB_TYPE === 'mysql'
+        ? {}
+        : {
+              ssl: {
+                  require: true,
+                  rejectUnauthorized: false,
+              },
+          }
+
 const customizeConfig = {
     host: process.env.DB_HOST,
     dialect: process.env.DB_TYPE,
@@ -16,12 +26,7 @@ const customizeConfig = {
         raw: true,
     },
     timezone: '+07:00',
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false,
-        },
-    },
+    dialectOptions: useSSL,
 }
 
 let sequelize

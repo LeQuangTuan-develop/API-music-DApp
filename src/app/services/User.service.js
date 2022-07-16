@@ -1,14 +1,38 @@
 const httpStatus = require('http-status')
 const bcrypt = require('bcryptjs')
+const { tokenTypes } = require('../../configs/tokens')
+const TokenService = require('../services/Token.service')
 const { User } = require('../models')
 const ApiError = require('../../utils/apiError')
-
+const AuthService = require('../services/Auth.service')
 const userRepository = require('../repositories/user.repositoty')
 const { Op } = require('sequelize')
 class UserService {
     async getAllUsers() {
-        console.log('run here')
         return await User.findAll()
+    }
+
+    async handleLoginWithGoogle(data) {
+        const user = await User.findOne({
+            where: {
+                [Op.or]: [{ username: data.username }, { email: data.email }],
+            },
+        })
+        if (!user) {
+            data.password = await bcrypt.hash(data.username, 10)
+            const user = await new User(data).save()
+            const doSave = await TokenService.saveToken(
+                null,
+                user._id,
+                tokenTypes.REFRESH
+            )
+            return user
+        } else {
+            return await AuthService.getUserByAccountAndPassword(
+                data.username,
+                data.username
+            )
+        }
     }
 
     async createUser(data) {
@@ -42,7 +66,6 @@ class UserService {
                 httpStatus.BAD_REQUEST,
                 'This user does not exist'
             )
-
         return user
     }
 
