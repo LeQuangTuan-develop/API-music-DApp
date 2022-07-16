@@ -26,16 +26,18 @@ class TokenService {
             user.username,
             refreshTokenExpires,
             tokenTypes.REFRESH
-        )   
-
-        let currentToken = await this.getRefreshTokenByUserId(user._id);
-        if (!(currentToken)) {
+        )
+        const currentToken = await this.getRefreshTokenByUserId(user._id)
+        if (currentToken == null || this.checkExpireToken(currentToken)) {
             await this.updateRefreshTokenByUserId(user._id, refreshToken)
         } else {
             refreshToken = currentToken
         }
 
-        return { accessToken, refreshToken }
+        return {
+            accessToken,
+            refreshToken,
+        }
     }
 
     generateToken(userId, expires, type, secret = process.env.PASSPORT_JWT) {
@@ -50,12 +52,18 @@ class TokenService {
 
     async updateRefreshTokenByUserId(userId, refreshToken) {
         return await Token.update(
-            { token: refreshToken },
+            {
+                token: refreshToken,
+            },
             {
                 where: {
                     [Op.and]: [
-                        { userId: userId },
-                        { type: tokenTypes.REFRESH },
+                        {
+                            userId: userId,
+                        },
+                        {
+                            type: tokenTypes.REFRESH,
+                        },
                     ],
                 },
             }
@@ -75,21 +83,67 @@ class TokenService {
     async getRefreshTokenByUserId(userId) {
         const refreshTokenDoc = await Token.findOne({
             where: {
-                [Op.and]: [{ userId: userId}, {type: tokenTypes.REFRESH }],
+                [Op.and]: [
+                    {
+                        userId: userId,
+                    },
+                    {
+                        type: tokenTypes.REFRESH,
+                    },
+                ],
             },
         })
         return refreshTokenDoc.token
     }
 
     // decode token expired to create new access token
-    async decodeToken(token, secretKey = process.env.PASSPORT_JWT) {
+    decodeToken(token, ignoreDate, secretKey = process.env.PASSPORT_JWT) {
         try {
             return jwt.verify(token, secretKey, {
-                ignoreExpiration: true,
+                ignoreExpiration: ignoreDate,
             })
         } catch (error) {
             return null
         }
+    }
+
+    checkAccessToken(decodedAccessToken) {
+        if (
+            !decodedAccessToken ||
+            decodedAccessToken.type !== tokenTypes.ACCESS
+        ) {
+            throw new ApiError(
+                httpStatus.UNAUTHORIZED,
+                ' Access Token invalid!'
+            )
+        }
+        return true
+    }
+
+    async checkRefreshToken(refreshToken, userId) {
+        const decodedRefreshToken = this.decodeToken(refreshToken, false)
+        if (
+            refreshToken !==
+            ((await this.getRefreshTokenByUserId(userId)) ||
+                decodedRefreshToken.type !== tokenTypes.REFRESH)
+        ) {
+            throw new ApiError(
+                httpStatus.UNAUTHORIZED,
+                'Refresh Token invalid!'
+            )
+        }
+        return true
+    }
+
+    checkExpireToken(token, secretKey = process.env.PASSPORT_JWT) {
+        const { exp } = jwt.decode(token, secretKey)
+        if (Date.now() >= exp * 1000) {
+            throw new ApiError(
+                httpStatus.UNAUTHORIZED,
+                'Refresh Token has been expired!'
+            )
+        }
+        return false
     }
 }
 

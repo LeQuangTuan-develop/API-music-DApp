@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
                 unique: true,
                 allowNull: false,
                 validate: {
-                    len: [8, 128],
+                    len: [1, 128],
                     not: {
                         args: /((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm,
                         msg: `Your username can't be blank! `,
