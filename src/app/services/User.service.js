@@ -9,11 +9,10 @@ const userRepository = require('../repositories/user.repositoty')
 const { Op } = require('sequelize')
 class UserService {
     async getAllUsers() {
-        console.log('run here')
         return await User.findAll()
     }
 
-    async handleLoginWithGoogle(data){
+    async handleLoginWithGoogle(data) {
         const user = await User.findOne({
             where: {
                 [Op.or]: [{ username: data.username }, { email: data.email }],
@@ -21,16 +20,19 @@ class UserService {
         })
         if (!user) {
             data.password = await bcrypt.hash(data.username, 10)
-            const user = await new User(data).save();
-            const doSave = await TokenService.saveToken(null, user._id, tokenTypes.REFRESH)
+            const user = await new User(data).save()
+            const doSave = await TokenService.saveToken(
+                null,
+                user._id,
+                tokenTypes.REFRESH
+            )
             return user
-        }else{
+        } else {
             return await AuthService.getUserByAccountAndPassword(
                 data.username,
                 data.username
             )
         }
-
     }
 
     async createUser(data) {
@@ -76,7 +78,6 @@ class UserService {
             )
 
         Object.keys(body).forEach((key) => {
-            console.log(body[key])
             user[key] = body[key]
         })
         await user.save()

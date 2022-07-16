@@ -20,7 +20,7 @@ class AuthController {
             let tokens = await TokenService.generateAuthTokens(user)
             res = AuthService.responseSetHeader(res, tokens)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, null, 'Login successfully!')
+                dataResponse(httpStatus.OK, user, 'Login successfully!')
             )
         } catch (error) {
             next(error)
@@ -101,7 +101,7 @@ class AuthController {
             )
 
             // end define variable
-                
+
             if (
                 isValidAccessToken &&
                 !isExpiredRefreshToken &&

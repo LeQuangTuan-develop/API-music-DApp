@@ -96,6 +96,15 @@ class TokenService {
         return refreshTokenDoc.token
     }
 
+    async getTokenByRefresh(refreshToken) {
+        const refreshTokenDoc = await Token.findOne({
+            where: {
+                token: refreshToken,
+            },
+        })
+        return refreshTokenDoc
+    }
+
     // decode token expired to create new access token
     decodeToken(token, ignoreDate, secretKey = process.env.PASSPORT_JWT) {
         try {
