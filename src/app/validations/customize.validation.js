@@ -14,13 +14,8 @@ const password = (value, helpers) => {
 const name = (value, helpers) =>{
     if (value.match(/\s/)) {
         console.log("result:" + value)
-        return helpers.message('Name cannot be null')
+        return helpers.message('Name cannot be blank')
     } 
-
-    if(value.match(/\d/)){
-        console.log("result:" + value)
-        return helpers.message('Name cannot containts number')
-    }
     
     return value
 }
