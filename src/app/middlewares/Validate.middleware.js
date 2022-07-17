@@ -1,8 +1,8 @@
 const Joi = require('joi')
 const httpStatus = require('http-status')
 
-const pickKeys = require('../../utils/pickKeys')
-const ApiError = require('../../utils/apiError')
+const pickKeys = require('../../utils/PickKeys.util')
+const ApiError = require('../../utils/ApiError.util')
 
 module.exports = (schema) => (req, res, next) => {
     const validSchema = pickKeys(schema, ['params', 'query', 'body'])

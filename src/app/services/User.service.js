@@ -1,8 +1,8 @@
 const httpStatus = require('http-status')
 const bcrypt = require('bcryptjs')
 const { User } = require('../models')
-const ApiError = require('../../utils/apiError')
-const { checkValidObjectId } = require('../../utils/helper')
+const ApiError = require('../../utils/ApiError.util')
+const { checkValidObjectId } = require('../../utils/Helper.util')
 class UserService {
     async getAllUsers() {
         console.log('run here')

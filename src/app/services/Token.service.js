@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
-const ApiError = require('../../utils/apiError')
+const ApiError = require('../../utils/ApiError.util')
 const httpStatus = require('http-status')
 const { Token } = require('../models')
 const { tokenTypes } = require('../../configs/tokens')

@@ -2,7 +2,7 @@ const httpStatus = require('http-status')
 const AuthService = require('../services/Auth.Service')
 const TokenService = require('../services/Token.Service')
 const UserService = require('../services/User.Service')
-const { dataResponse } = require('../../utils/response')
+const { dataResponse } = require('../../utils/Response.util')
 
 class AuthController {
     // POST auth/login

@@ -1,6 +1,6 @@
 const { User } = require('../models')
 const bcrypt = require('bcryptjs')
-const ApiError = require('../../utils/apiError')
+const ApiError = require('../../utils/ApiError.util')
 const httpStatus = require('http-status')
 const TokenService = require('./Token.service')
 
