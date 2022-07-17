@@ -14,6 +14,7 @@ class AuthController {
                 password
             )
             const tokens = await TokenService.generateAuthTokens(user)
+            console.log(tokens)
             res = AuthService.responseSetHeader(res, tokens)
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, user))
         } catch (error) {
