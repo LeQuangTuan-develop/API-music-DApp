@@ -10,6 +10,17 @@ const password = (value, helpers) => {
     return value
 }
 
+
+const name = (value, helpers) =>{
+    if (value.match(/\s/)) {
+        console.log("result:" + value)
+        return helpers.message('Name cannot be blank')
+    } 
+    
+    return value
+}
+
 module.exports = {
     password,
+    name,
 }
