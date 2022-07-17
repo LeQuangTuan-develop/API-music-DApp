@@ -50,6 +50,12 @@ app.use(passport.initialize())
 
 app.use('/api', route)
 
+app.use('/', function (req, res, next) {
+    res.status(200).json({
+        message: 'Chicken Floor say ò ó o',
+    })
+})
+
 // convert error to ApiError, if needed
 app.use(errorConverter)
 
