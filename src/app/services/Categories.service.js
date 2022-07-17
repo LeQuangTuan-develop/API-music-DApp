@@ -3,13 +3,15 @@ const { SongCategory } = require('../models')
 
 class CategoriesService {
     async getListCategories() {
-        console.log('run here')
         return await SongCategory.findAll()
     }
 
     async createCateSong(data) {
         if (await SongCategory.findOne({ where: { name: data.name } })) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'This cate of song already taken')
+            throw new ApiError(
+                httpStatus.BAD_REQUEST,
+                'This cate of song already taken'
+            )
         }
         const newSongCategory = new SongCategory(data)
         const saveCateSong = await newSongCategory.save()
@@ -58,8 +60,6 @@ class CategoriesService {
 
         return cateSong
     }
-
 }
-
 
 module.exports = new CategoriesService()

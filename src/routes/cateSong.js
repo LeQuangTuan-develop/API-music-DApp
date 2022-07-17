@@ -11,10 +11,12 @@ router.get(
     CategoriesSongController.index
 )
 
-router.post('/create', 
-passport.authenticate('jwt', { session: false }),
-validate(cateValidate.createCateSchema),
-CategoriesSongController.create)
+router.post(
+    '/',
+    passport.authenticate('jwt', { session: false }),
+    validate(cateValidate.createCateSchema),
+    CategoriesSongController.create
+)
 
 router.get(
     '/:id',
@@ -28,7 +30,6 @@ router.put(
     validate(cateValidate.updateCateSchema),
     CategoriesSongController.update
 )
-
 
 router.delete(
     '/:id',
