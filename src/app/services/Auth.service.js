@@ -4,6 +4,7 @@ const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const TokenService = require('./Token.service')
 const { Op } = require('sequelize')
+const TokenRepository = require('../repositories/Token.repository')
 
 class AuthService {
     async getUserByAccountAndPassword(account, password) {
@@ -23,9 +24,11 @@ class AuthService {
         const refreshTokenDoc = await TokenService.getTokenByRefresh(
             refreshToken
         )
-        refreshTokenDoc.token = null
-        await refreshTokenDoc.save()
-        return true
+        if (!refreshTokenDoc) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Wrong Refresh Token')
+        }
+        const logoutToken = await TokenRepository.logout(refreshToken)
+        return logoutToken
     }
 
     responseSetHeader(res, tokens) {
