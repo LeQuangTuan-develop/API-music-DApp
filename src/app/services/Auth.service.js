@@ -23,7 +23,8 @@ class AuthService {
         const refreshTokenDoc = await TokenService.getTokenByRefresh(
             refreshToken
         )
-        await refreshTokenDoc.remove()
+        refreshTokenDoc.token = null
+        await refreshTokenDoc.save()
         return true
     }
 

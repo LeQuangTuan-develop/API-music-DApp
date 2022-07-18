@@ -5,6 +5,8 @@ const UserService = require('../services/User.Service')
 const { dataResponse } = require('../../utils/response')
 const { tokenTypes } = require('../../configs/tokens')
 const moment = require('moment')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 class AuthController {
     // POST auth/login
@@ -18,8 +20,27 @@ class AuthController {
             let tokens = await TokenService.generateAuthTokens(user)
             res = AuthService.responseSetHeader(res, tokens)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, null, 'Login successfully!')
+                dataResponse(httpStatus.OK, user, 'Login successfully!')
             )
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async handleLoginWithGoogle(req, res, next) {
+        try {
+            let { googleId, avatar } = req.body
+            req.body.avatarUrl = avatar
+            req.body.username = googleId
+
+            const user = await UserService.handleLoginWithGoogle(req.body)
+            if (user) {
+                let tokens = await TokenService.generateAuthTokens(user)
+                res = AuthService.responseSetHeader(res, tokens)
+                res.status(httpStatus.OK).json(
+                    dataResponse(httpStatus.OK, user, 'Login successfully!')
+                )
+            }
         } catch (error) {
             next(error)
         }
@@ -39,13 +60,13 @@ class AuthController {
     async register(req, res, next) {
         try {
             const user = await UserService.createUser(req.body)
-            if(user){
+            if (user) {
                 await TokenService.saveToken(null, user._id, tokenTypes.REFRESH)
             }
             res.status(httpStatus.CREATED).json(
                 dataResponse(
                     httpStatus.CREATED,
-                    null,
+                    user,
                     'Create account successfully!'
                 )
             )
@@ -57,36 +78,56 @@ class AuthController {
     // POST auth/refresh
     async refreshTokens(req, res, next) {
         try {
-            const authHeader = req.headers.authorization;
-            const accessTokenFromHeader = authHeader.split(' ')[1];
+            // define variable
+            const accessTokenFromHeader =
+                req.headers.authorization.split(' ')[1]
             const refreshTokenFromBody = req.body.refreshToken
 
-            const decoded = await TokenService.decodeToken( accessTokenFromHeader)
-            if(!decoded){
-                res.status(httpStatus.UNAUTHORIZED).json(
-                    dataResponse(httpStatus.UNAUTHORIZED, null, 'Access Token invalid!')
+            const decodedAccessToken = TokenService.decodeToken(
+                accessTokenFromHeader,
+                true
+            )
+
+            const user = await UserService.getUserByUsername(
+                decodedAccessToken.sub
+            )
+            const isValidAccessToken =
+                TokenService.checkAccessToken(decodedAccessToken)
+            const isExpiredRefreshToken =
+                TokenService.checkExpireToken(refreshTokenFromBody)
+            const isValidRefreshToken = TokenService.checkRefreshToken(
+                refreshTokenFromBody,
+                user._id
+            )
+
+            // end define variable
+
+            if (
+                isValidAccessToken &&
+                !isExpiredRefreshToken &&
+                isValidRefreshToken
+            ) {
+                // do refresh token
+                const accessTokenExpires = moment().add(
+                    process.env.PASSPORT_JWT_ACCESS_EXPIRED / 60,
+                    'minutes'
                 )
-            } 
 
-            const account = decoded.sub;
+                const accessToken = TokenService.generateToken(
+                    user.username,
+                    accessTokenExpires,
+                    tokenTypes.ACCESS
+                )
 
-            const user = await UserService.getUserByUsername(account);
-
-            if(refreshTokenFromBody !== await TokenService.getRefreshTokenByUserId(user._id)){
-                res.status(httpStatus.UNAUTHORIZED).json(
-                    dataResponse(httpStatus.UNAUTHORIZED, null, 'Refresh Token invalid!')
+                res.setHeader('Authorization-access', accessToken)
+                res.status(httpStatus.OK).json(
+                    dataResponse(
+                        httpStatus.OK,
+                        accessToken,
+                        'Reset access token successfully!'
+                    )
                 )
             }
-            const accessTokenExpires = moment().add(
-                process.env.PASSPORT_JWT_ACCESS_EXPIRED / 60,
-                'minutes'
-            )
-            
-            const accessToken = TokenService.generateToken( user.username, accessTokenExpires, tokenTypes.ACCESS )
-            res.setHeader('Authorization-access', accessToken)
-            res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, accessToken, 'Reset access token successfully!')
-            )
         } catch (error) {
             next(error)
         }

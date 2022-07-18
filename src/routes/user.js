@@ -14,7 +14,6 @@ router.get(
     passport.authenticate('jwt', { session: false }),
     UserController.show
 )
-router.post('/', UserController.create)
 router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),

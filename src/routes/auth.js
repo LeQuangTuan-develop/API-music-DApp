@@ -13,18 +13,25 @@ router.post(
     validate(authValidation.loginSchema),
     AuthController.login
 )
+
+router.post(
+    '/login-google',
+    validate(authValidation.googleAccountSchema),
+    AuthController.handleLoginWithGoogle
+)
 router.post(
     '/logout',
     validate(authValidation.refreshSchema),
     passport.authenticate('jwt', { session: false }),
     AuthController.logout
 )
-// POST api/auth/register
+// POST api/v1/auth/register
 router.post(
     '/register',
     validate(authValidation.registerSchema),
     AuthController.register
 )
+
 router.post(
     '/refresh',
     validate(authValidation.refreshSchema),
