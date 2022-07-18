@@ -18,9 +18,16 @@ class AuthController {
                 password
             )
             let tokens = await TokenService.generateAuthTokens(user)
-            res = AuthService.responseSetHeader(res, tokens)
+            // res = AuthService.responseSetHeader(res, tokens)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, user, 'Login successfully!')
+                dataResponse(
+                    httpStatus.OK,
+                    {
+                        user,
+                        tokens,
+                    },
+                    'Login successfully!'
+                )
             )
         } catch (error) {
             next(error)
@@ -36,9 +43,16 @@ class AuthController {
             const user = await UserService.handleLoginWithGoogle(req.body)
             if (user) {
                 let tokens = await TokenService.generateAuthTokens(user)
-                res = AuthService.responseSetHeader(res, tokens)
+                // res = AuthService.responseSetHeader(res, tokens)
                 res.status(httpStatus.OK).json(
-                    dataResponse(httpStatus.OK, user, 'Login successfully!')
+                    dataResponse(
+                        httpStatus.OK,
+                        {
+                            user,
+                            tokens,
+                        },
+                        'Login successfully!'
+                    )
                 )
             }
         } catch (error) {

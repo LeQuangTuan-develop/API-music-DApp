@@ -24,9 +24,13 @@ var accessLogStream = rfs.createStream('access.log', {
     path: path.join(__dirname, 'log'),
 })
 
+const corsOptions = {
+    exposedHeaders: ['Authorization-access', 'Authorization-refresh'],
+}
+
 // middleware
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(helmet())
 app.use(
     isProduction
