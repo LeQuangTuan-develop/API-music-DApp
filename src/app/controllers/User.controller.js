@@ -4,7 +4,7 @@ const { dataResponse } = require('../../utils/response')
 
 class UserController {
     // GET users
-    async index(req, res, next) {
+    async getAllUsers(req, res, next) {
         try {
             const users = await UserService.getAllUsers()
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, users))
@@ -14,7 +14,7 @@ class UserController {
     }
 
     // GET users/:id
-    async show(req, res, next) {
+    async getUser(req, res, next) {
         try {
             // const user = await UserService.getUserById(req.params.id)
             res.status(httpStatus.OK).json(
