@@ -3,6 +3,7 @@ const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt')
 const { tokenTypes } = require('../../configs/tokens')
 
 const { User } = require('../models')
+const UserService = require('../services/User.service')
 
 const jwtOptions = {
     secretOrKey: process.env.PASSPORT_JWT,
@@ -14,7 +15,7 @@ const jwtVerify = async (payload, done) => {
         if (payload.type !== tokenTypes.ACCESS) {
             throw new Error('Invalid token type')
         }
-        const user = await User.findByPk(payload.sub)
+        const user = await UserService.getUserByUsername(payload.sub)
         if (!user) {
             return done(null, false)
         }

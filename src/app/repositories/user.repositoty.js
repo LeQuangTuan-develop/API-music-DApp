@@ -4,7 +4,7 @@ class UserRepository {
     async test() {
         const users = await User.findAll({
             where: {
-                gender: 1,
+                gender: true,
             },
             attributes: {
                 exclude: ['createdAt', 'updatedAt'],
