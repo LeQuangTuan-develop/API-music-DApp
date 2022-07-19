@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             // Category -> song
             SongCategory.hasMany(models.Song, {
                 foreignKey: 'categoryId',
-                as: 'songData',
+                as: 'categoryData',
             })
         }
     }

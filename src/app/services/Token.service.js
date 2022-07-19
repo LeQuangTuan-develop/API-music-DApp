@@ -5,6 +5,7 @@ const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const { Token } = require('../models')
 const { tokenTypes } = require('../../configs/tokens')
+const { Op } = require('sequelize')
 class TokenService {
     async generateAuthTokens(user) {
         const accessTokenExpires = moment().add(
@@ -12,7 +13,7 @@ class TokenService {
             'minutes'
         )
         const accessToken = this.generateToken(
-            user._id,
+            user.username,
             accessTokenExpires,
             tokenTypes.ACCESS
         )
@@ -21,27 +22,21 @@ class TokenService {
             process.env.PASSPORT_JWT_REFRESH_EXPIRED / 60,
             'minutes'
         )
-        const refreshToken = this.generateToken(
-            user._id,
+        let refreshToken = this.generateToken(
+            user.username,
             refreshTokenExpires,
             tokenTypes.REFRESH
         )
-        await this.saveToken(
-            refreshToken,
-            user._id,
-            refreshTokenExpires,
-            tokenTypes.REFRESH
-        )
+        const currentToken = await this.getRefreshTokenByUserId(user._id)
+        if (currentToken == null || this.checkExpireToken(currentToken)) {
+            await this.updateRefreshTokenByUserId(user._id, refreshToken)
+        } else {
+            refreshToken = currentToken
+        }
 
         return {
-            access: {
-                token: accessToken,
-                expires: accessTokenExpires.toDate(),
-            },
-            refresh: {
-                token: refreshToken,
-                expires: refreshTokenExpires.toDate(),
-            },
+            accessToken,
+            refreshToken,
         }
     }
 
@@ -55,26 +50,109 @@ class TokenService {
         return jwt.sign(payload, secret)
     }
 
-    async saveToken(token, userId, expires, type, blackListed = false) {
+    async updateRefreshTokenByUserId(userId, refreshToken) {
+        return await Token.update(
+            {
+                token: refreshToken,
+            },
+            {
+                where: {
+                    [Op.and]: [
+                        {
+                            userId: userId,
+                        },
+                        {
+                            type: tokenTypes.REFRESH,
+                        },
+                    ],
+                },
+            }
+        )
+    }
+
+    async saveToken(token, userId, type, blackListed = false) {
         const tokenDoc = await Token.create({
             token,
             userId: userId,
-            expiredDate: expires.toDate(),
             type,
             blackListed,
         })
         return tokenDoc
     }
 
+    async getRefreshTokenByUserId(userId) {
+        const refreshTokenDoc = await Token.findOne({
+            where: {
+                [Op.and]: [
+                    {
+                        userId: userId,
+                    },
+                    {
+                        type: tokenTypes.REFRESH,
+                    },
+                ],
+            },
+        })
+        return refreshTokenDoc.token
+    }
+
     async getTokenByRefresh(refreshToken) {
         const refreshTokenDoc = await Token.findOne({
-            token: refreshToken,
-            type: tokenTypes.REFRESH,
+            where: {
+                token: refreshToken,
+            },
         })
-        if (!refreshTokenDoc) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Forbidden')
-        }
         return refreshTokenDoc
+    }
+
+    // decode token expired to create new access token
+    decodeToken(token, ignoreDate, secretKey = process.env.PASSPORT_JWT) {
+        try {
+            return jwt.verify(token, secretKey, {
+                ignoreExpiration: ignoreDate,
+            })
+        } catch (error) {
+            return null
+        }
+    }
+
+    checkAccessToken(decodedAccessToken) {
+        if (
+            !decodedAccessToken ||
+            decodedAccessToken.type !== tokenTypes.ACCESS
+        ) {
+            throw new ApiError(
+                httpStatus.UNAUTHORIZED,
+                ' Access Token invalid!'
+            )
+        }
+        return true
+    }
+
+    async checkRefreshToken(refreshToken, userId) {
+        const decodedRefreshToken = this.decodeToken(refreshToken, false)
+        if (
+            refreshToken !==
+            ((await this.getRefreshTokenByUserId(userId)) ||
+                decodedRefreshToken.type !== tokenTypes.REFRESH)
+        ) {
+            throw new ApiError(
+                httpStatus.UNAUTHORIZED,
+                'Refresh Token invalid!'
+            )
+        }
+        return true
+    }
+
+    checkExpireToken(token, secretKey = process.env.PASSPORT_JWT) {
+        const { exp } = jwt.decode(token, secretKey)
+        if (Date.now() >= exp * 1000) {
+            throw new ApiError(
+                httpStatus.UNAUTHORIZED,
+                'Refresh Token has been expired!'
+            )
+        }
+        return false
     }
 }
 
