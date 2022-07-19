@@ -4,14 +4,14 @@ const { name } = require('./customize.validation')
 
 const createCateSchema = {
     body: Joi.object().keys({
-        name: Joi.string().required().custom(name),
+        name: Joi.string().required().trim(),
         imageUrl: Joi.string().required(),
     }),
 }
 
 const updateCateSchema = {
     body: Joi.object().keys({
-        name: Joi.string().required().custom(name),
+        name: Joi.string().required().trim(),
         imageUrl: Joi.string().required(),
     }),
 }
