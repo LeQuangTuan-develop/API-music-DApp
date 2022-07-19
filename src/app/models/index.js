@@ -21,7 +21,7 @@ const useSSL =
 const customizeConfig = {
     host: process.env.DB_HOST,
     dialect: process.env.DB_TYPE,
-    logging: false,
+    logging: true,
     query: {
         raw: true,
     },
@@ -66,8 +66,8 @@ Object.keys(db).forEach((modelName) => {
     }
 })
 
-// db.sequelize = sequelize.sync()
-db.sequelize = sequelize
+db.sequelize = sequelize.sync()
+// db.sequelize = sequelize
 db.Sequelize = Sequelize
 
 module.exports = db

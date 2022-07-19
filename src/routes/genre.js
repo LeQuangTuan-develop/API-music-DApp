@@ -25,6 +25,7 @@ router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),
     validateRole,
+    validate(genreValidation.checkGenre),
     GenreController.update
 )
 
@@ -33,6 +34,13 @@ router.delete(
     passport.authenticate('jwt', { session: false }),
     validateRole,
     GenreController.delete
+)
+
+router.get(
+    '/:id',
+    passport.authenticate('jwt', { session: false }),
+    validateRole,
+    GenreController.getDetail
 )
 
 module.exports = router

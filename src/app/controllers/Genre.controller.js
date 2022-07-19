@@ -61,6 +61,16 @@ class GenreController {
             next(error)
         }
     }
+    //Get detail
+    async getDetail(req, res, next) {
+        try {
+            const id = req.params.id
+            const genres = await GenreService.getDetail(id)
+            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, genres))
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = new GenreController();
