@@ -5,8 +5,6 @@ const UserService = require('../services/User.service')
 const { dataResponse } = require('../../utils/response')
 const { tokenTypes } = require('../../configs/tokens')
 const moment = require('moment')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
 
 class AuthController {
     // POST auth/login
