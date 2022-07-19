@@ -3,6 +3,7 @@ const router = express.Router()
 const UserController = require('../app/controllers/User.controller')
 const passport = require('passport')
 
+router.get('/test', UserController.test)
 router.get(
     '/',
     passport.authenticate('jwt', { session: false }),
@@ -13,7 +14,6 @@ router.get(
     passport.authenticate('jwt', { session: false }),
     UserController.show
 )
-router.post('/', UserController.create)
 router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),

@@ -8,7 +8,7 @@ const errorConverter = (err, req, res, next) => {
 
     if (!(error instanceof ApiError)) {
         const statusCode =
-            error.statusCode || error instanceof mongoose.Error
+            error.statusCode
                 ? httpStatus.BAD_REQUEST
                 : httpStatus.INTERNAL_SERVER_ERROR
         const message = error.message || httpStatus[statusCode]

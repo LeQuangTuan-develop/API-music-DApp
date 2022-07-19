@@ -34,23 +34,26 @@ module.exports = (sequelize, DataTypes) => {
             username: {
                 type: DataTypes.STRING(60),
                 unique: true,
+                allowNull: false,
                 validate: {
-                    len: [8, 128],
+                    len: [1, 128],
                     not: {
                         args: /((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm,
                         msg: `Your username can't be blank! `,
                     },
+                    isAlphanumeric : true,
                     // check blank
                 },
             },
             password: {
-                type: DataTypes.STRING(128),
+                type: DataTypes.STRING(256),
+                allowNull: false,
                 validate: {
-                    len: [8, 128],
+                    len: [8, 256],
                 },
             },
             fullName: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(100),
                 allowNull: false,
             },
             address: {
@@ -71,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             phone: {
-                type: DataTypes.STRING(10),
+                type: DataTypes.STRING(12),
                 validate: {
                     is: {
                         args: ['^(84|0[3|5|7|8|9])+([0-9]{8})$', 'i'],
@@ -80,8 +83,9 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             email: {
-                type: DataTypes.STRING(320),
+                type: DataTypes.STRING(100),
                 validate: { isEmail: true },
+                unique: true,
             },
             avatarUrl: {
                 type: DataTypes.STRING(500),
@@ -96,8 +100,13 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: 'USER',
                 validate: {
                     isIn: [['USER', 'ADMIN']],
+                    isUppercase: true,
                 },
             },
+            isBlock : {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false,
+            }
         },
         {
             sequelize,
