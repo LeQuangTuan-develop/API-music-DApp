@@ -1,6 +1,8 @@
 const { Genre } = require('../models')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
+const { Op } = require('sequelize')
+const { post } = require('../../routes/genre')
 
 class GenreService {
     async getAllGenres() {
@@ -9,15 +11,11 @@ class GenreService {
     }
 
     async createGenre(data) {
-   
         const genre = await Genre.findOne({ where: { name: data.name } })
-        if(genre){
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                'This genre is exist'
-            )
+        if (genre) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'This genre is exist')
         }
-        
+
         const newGenre = new Genre(data)
         const saveGenre = await newGenre.save()
 
@@ -26,47 +24,43 @@ class GenreService {
 
     async updateGenre(id, body) {
         const genre = await Genre.findByPk(id)
-       
+
         if (!genre)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
                 'This genre does not exist'
             )
-        Object.keys(body).forEach((key) => {
-            console.log(body[key])
-            genre[key] = body[key]
+
+        const genre1 = await Genre.findAll({
+            where: {
+                [Op.and]: [
+                    {
+                        name: body.name,
+                    },
+                    {
+                        _id: {
+                            [Op.ne]: id,
+                        },
+                    },
+                ],
+            },
         })
-        //
-        const db = await Genre.findOne({ where: { name: body.name } })
 
-        if(!db){
-            await Genre.update(
-                {
-                    ...genre,
-                },
-                {
-                    where: { _id: id},
-                }
-            )
-            return genre;
+        console.log(genre1)
+
+        if (genre1.length > 0) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'This genre is exist')
         }
 
-        if(id!=db._id){
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                'This genre is exist'
-            )
-        }
-        //
         await Genre.update(
             {
-                ...genre,
+                ...body,
             },
             {
-                where: { _id: id},
+                where: { _id: id },
             }
         )
-        return genre
+        return body
     }
 
     async deleteGenre(id) {

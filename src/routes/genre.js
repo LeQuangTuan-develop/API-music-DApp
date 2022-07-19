@@ -18,12 +18,6 @@ router.post(
     passport.authenticate('jwt', { session: false }),
     validateRole,
     validate(genreValidation.checkGenre),
-    // const genre = Genre.findOne({where:{title:'name'}})
-    // if(genre.name!=genre){
-    //     console.log("error")
-    // }
-    //     console.log("error123234234")
-    
     GenreController.create
 )
 
