@@ -14,6 +14,7 @@ const db = require('./src/app/models/index')
 const route = require('./src/routes')
 const { jwtStrategy } = require('./src/app/middlewares/passport')
 const { errorConverter, errorHandler } = require('./src/app/middlewares/error')
+require('./src/configs/elasticSearch')
 
 const app = express()
 
