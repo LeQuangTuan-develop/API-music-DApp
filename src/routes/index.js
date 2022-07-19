@@ -9,6 +9,6 @@ const apiRoute = express()
 apiRoute.use('/cates', catesRouter)
 apiRoute.use('/users', userRouter)
 apiRoute.use('/auth', authRouter)
-apiRoute.use('/genre', genreRouter)
+apiRoute.use('/genres', genreRouter)
 
 module.exports = apiRoute

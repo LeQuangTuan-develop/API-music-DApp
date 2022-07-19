@@ -14,7 +14,7 @@ router.get(
 )
 
 router.post(
-    '/create',
+    '/',
     passport.authenticate('jwt', { session: false }),
     validateRole,
     validate(genreValidation.checkGenre),
