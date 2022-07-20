@@ -1,7 +1,7 @@
 const httpStatus = require('http-status')
 const { SongCategory } = require('../models')
 const ApiError = require('../../utils/apiError')
-
+const { Op } = require('sequelize')
 class CategoriesService {
 
     async createCateSong(data) {
@@ -17,7 +17,7 @@ class CategoriesService {
         return saveCateSong
     }
 
-    async getPage(req, res) {
+    async getPage(req) {
         const cates = await SongCategory.findAndCountAll({
             limit: req.query._size,
             offset: req.query._page * req.query._size,
@@ -41,26 +41,42 @@ class CategoriesService {
     }
 
     async updateCate(id, body) {
-        const findID = await SongCategory.findByPk(id)
-        if (!findID)
+        const cate = await SongCategory.findByPk(id)
+
+        if (!cate)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This cate does not exist'
+                'This genre does not exist'
             )
-        if(findID){
-            const updateCateSong = await SongCategory.update(
-                {
-                    ...body,
-                },
-                 {
-                where: {
-                    _id: id
-                }
+
+        const cate1 = await SongCategory.findAll({
+            where: {
+                [Op.and]: [
+                    {
+                        name: body.name,
+                    },
+                    {
+                        _id: {
+                            [Op.ne]: id,
+                        },
+                    },
+                ],
+            },
+        })
+
+        if (cate1.length > 0) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'This genre is exist')
+        }
+
+        await Genre.update(
+            {
+                ...body,
+            },
+            {
+                where: { _id: id },
             }
         )
-            return await SongCategory.findByPk(id)
-        }
-        return findID
+        return body
     }
 
     async deleteCate(id) {
