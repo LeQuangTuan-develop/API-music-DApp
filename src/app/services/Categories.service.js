@@ -1,10 +1,8 @@
 const httpStatus = require('http-status')
 const { SongCategory } = require('../models')
+const ApiError = require('../../utils/apiError')
 
 class CategoriesService {
-    async getListCategories() {
-        return await SongCategory.findAll()
-    }
 
     async createCateSong(data) {
         if (await SongCategory.findOne({ where: { name: data.name } })) {
@@ -19,20 +17,50 @@ class CategoriesService {
         return saveCateSong
     }
 
+    async getPage(req, res) {
+        const cates = await SongCategory.findAndCountAll({
+            limit: req.query._size,
+            offset: req.query._page * req.query._size,
+        })
+
+        if (!Number.isNaN(req.query._page ) && req.query._page  > 0) {
+            if(req.query._page >Math.ceil(cates.count/req.query._size)){
+                req.query._size = 0
+            }
+        }
+
+        const value = {
+            countAll: cates.count,
+            countItem: req.query._size,
+            page: req.query._page +1,
+            data: cates.rows, 
+            totalPages: Math.ceil(cates.count/req.query._size)
+        }
+
+        return value
+    }
+
     async updateCate(id, body) {
-        const cateSong = await SongCategory.findByPk(id)
-        if (!cateSong)
+        const findID = await SongCategory.findByPk(id)
+        if (!findID)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
                 'This cate does not exist'
             )
-
-        Object.keys(body).forEach((key) => {
-            console.log(body[key])
-            cateSong[key] = body[key]
-        })
-        await cateSong.save()
-        return cateSong
+        if(findID){
+            const updateCateSong = await SongCategory.update(
+                {
+                    ...body,
+                },
+                 {
+                where: {
+                    _id: id
+                }
+            }
+        )
+            return await SongCategory.findByPk(id)
+        }
+        return findID
     }
 
     async deleteCate(id) {
