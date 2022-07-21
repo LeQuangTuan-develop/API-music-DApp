@@ -14,7 +14,7 @@ const db = require('./src/app/models/index')
 const route = require('./src/routes')
 const { jwtStrategy } = require('./src/app/middlewares/passport')
 const { errorConverter, errorHandler } = require('./src/app/middlewares/error')
-
+const elastic = require('./src/configs/elastic-client')
 const app = express()
 
 const port = process.env.PORT || 4000

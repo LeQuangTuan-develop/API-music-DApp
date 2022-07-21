@@ -23,11 +23,11 @@ const imageUrl = (value,helpers)=>{
 
 
 const name = (value, helpers) =>{
-    if (value.match(/\s/)) {
+    if (value.match(/!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/)) {
         console.log("result:" + value)
-        return helpers.message('Name cannot be blank')
+        return helpers.message('Name cannot constain special char')
     } 
-    
+
     return value
 }
 

@@ -4,11 +4,13 @@ const CategoriesSongController = require('../app/controllers/CategoriesSongContr
 const passport = require('passport')
 const cateValidate = require('../app/validations/cate.validations')
 const validate = require('../app/middlewares/validate')
+const {pagination} = require('../app/middlewares/paginate')
 
 router.get(
     '/',
     passport.authenticate('jwt', { session: false }),
-    CategoriesSongController.index
+    pagination,
+    CategoriesSongController.index,
 )
 
 router.post(

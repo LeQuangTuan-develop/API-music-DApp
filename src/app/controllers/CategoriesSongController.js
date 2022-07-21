@@ -3,15 +3,14 @@ const CategoriesService = require('../services/Categories.service')
 const { dataResponse } = require('../../utils/response')
 
 class CategoriesSongController{
-    async index(req, res, next) {
+    async  index(req, res, next) {
         try {
-            const cates = await CategoriesService.getListCategories()
+            const cates = await CategoriesService.getPage(req)
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, cates))
         } catch (error) {
             next(error)
         }
     }
-
     
     async create(req, res, next) {
         try {
