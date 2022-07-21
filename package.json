@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
+    "beautiful": "lint-staged",
     "dev": "nodemon ./index.js",
     "run-webpack": "webpack --mode development --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +12,11 @@
   "author": "chickenFloor ( )",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
+    "@faker-js/faker": "^7.3.0",
+=======
     "@elastic/elasticsearch": "^8.2.1",
+>>>>>>> develop
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "compression": "^1.7.4",
@@ -51,14 +56,14 @@
     "webpack-node-externals": "^3.0.0"
   },
   "lint-staged": {
-    "*.js": [
+    "src/**/*.{js,json}": [
       "eslint --fix",
-      "git add ."
+      "prettier --single-quote --trailing-comma all --tab-width 4 --semi false --print-width 80 --write 'src/**/*.{js,json}'"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "prettier --write . && git add -A ."
+      "pre-commit": "lint-staged"
     }
   },
   "repository": {
