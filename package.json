@@ -7,7 +7,8 @@
     "beautiful": "lint-staged",
     "dev": "nodemon ./index.js",
     "run-webpack": "webpack --mode development --config webpack.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "author": "chickenFloor ( )",
   "license": "ISC",
@@ -56,11 +57,6 @@
   },
   "lint-staged": {
     "src/**/*.{js,json}": "prettier --single-quote --trailing-comma all --tab-width 4 --semi false --print-width 80 --write"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "repository": {
     "type": "git",
