@@ -13,12 +13,19 @@ class AuthController {
         try {
             const user = await AuthService.getUserByAccountAndPassword(
                 account,
-                password
+                password,
             )
             let tokens = await TokenService.generateAuthTokens(user)
-            res = AuthService.responseSetHeader(res, tokens)
+            // res = AuthService.responseSetHeader(res, tokens)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, user, 'Login successfully!')
+                dataResponse(
+                    httpStatus.OK,
+                    {
+                        user,
+                        tokens,
+                    },
+                    'Login successfully!',
+                ),
             )
         } catch (error) {
             next(error)
@@ -34,9 +41,16 @@ class AuthController {
             const user = await UserService.handleLoginWithGoogle(req.body)
             if (user) {
                 let tokens = await TokenService.generateAuthTokens(user)
-                res = AuthService.responseSetHeader(res, tokens)
+                // res = AuthService.responseSetHeader(res, tokens)
                 res.status(httpStatus.OK).json(
-                    dataResponse(httpStatus.OK, user, 'Login successfully!')
+                    dataResponse(
+                        httpStatus.OK,
+                        {
+                            user,
+                            tokens,
+                        },
+                        'Login successfully!',
+                    ),
                 )
             }
         } catch (error) {
@@ -65,8 +79,8 @@ class AuthController {
                 dataResponse(
                     httpStatus.CREATED,
                     user,
-                    'Create account successfully!'
-                )
+                    'Create account successfully!',
+                ),
             )
         } catch (error) {
             next(error)
@@ -83,11 +97,11 @@ class AuthController {
 
             const decodedAccessToken = TokenService.decodeToken(
                 accessTokenFromHeader,
-                true
+                true,
             )
 
             const user = await UserService.getUserByUsername(
-                decodedAccessToken.sub
+                decodedAccessToken.sub,
             )
             const isValidAccessToken =
                 TokenService.checkAccessToken(decodedAccessToken)
@@ -95,7 +109,7 @@ class AuthController {
                 TokenService.checkExpireToken(refreshTokenFromBody)
             const isValidRefreshToken = TokenService.checkRefreshToken(
                 refreshTokenFromBody,
-                user._id
+                user._id,
             )
 
             // end define variable
@@ -108,13 +122,13 @@ class AuthController {
                 // do refresh token
                 const accessTokenExpires = moment().add(
                     process.env.PASSPORT_JWT_ACCESS_EXPIRED / 60,
-                    'minutes'
+                    'minutes',
                 )
 
                 const accessToken = TokenService.generateToken(
                     user.username,
                     accessTokenExpires,
-                    tokenTypes.ACCESS
+                    tokenTypes.ACCESS,
                 )
 
                 res.setHeader('Authorization-access', accessToken)
@@ -122,8 +136,8 @@ class AuthController {
                     dataResponse(
                         httpStatus.OK,
                         accessToken,
-                        'Reset access token successfully!'
-                    )
+                        'Reset access token successfully!',
+                    ),
                 )
             }
         } catch (error) {

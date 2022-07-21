@@ -13,8 +13,8 @@
   "author": "chickenFloor ( )",
   "license": "ISC",
   "dependencies": {
-    "@elastic/elasticsearch": "^8.2.1",
     "@faker-js/faker": "^7.3.0",
+    "@elastic/elasticsearch": "^8.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "compression": "^1.7.4",
