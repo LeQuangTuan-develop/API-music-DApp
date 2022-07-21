@@ -2,7 +2,7 @@ const { Genre } = require('../models')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const { Op } = require('sequelize')
-const { post } = require('../../routes/genre')
+const GenreRepository = require('../repositories/Genre.repository')
 
 class GenreService {
     async getAllGenres() {
@@ -86,6 +86,11 @@ class GenreService {
                 'This genre does not exist'
             )
         return genre
+    }
+
+    async search(search) {
+        const result = await GenreRepository.search(search)
+        return result
     }
 }
 

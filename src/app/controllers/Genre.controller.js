@@ -12,8 +12,8 @@ class GenreController {
         }
     }
 
-     // POST genres/:id
-     async create(req, res, next) {
+    // POST genres/:id
+    async create(req, res, next) {
         try {
             const saveGenre = await GenreService.createGenre(req.body)
             res.status(httpStatus.CREATED).json(
@@ -28,8 +28,8 @@ class GenreController {
         }
     }
 
-     // PUT genres/:id
-     async update(req, res, next) {
+    // PUT genres/:id
+    async update(req, res, next) {
         try {
             const id = req.params.id
             const updateGenre = await GenreService.updateGenre(id, req.body)
@@ -45,8 +45,8 @@ class GenreController {
         }
     }
 
-     // DELETE genres/:id
-     async delete(req, res, next) {
+    // DELETE genres/:id
+    async delete(req, res, next) {
         try {
             const id = req.params.id
             const deleteGenre = await GenreService.deleteGenre(id)
@@ -71,6 +71,19 @@ class GenreController {
             next(error)
         }
     }
+
+    // GET /genres/search
+    async search(req, res, next) {
+        try {
+            const search = req.query.q
+            const result = await GenreService.search(search)
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, result, 'search successfully')
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
-module.exports = new GenreController();
+module.exports = new GenreController()

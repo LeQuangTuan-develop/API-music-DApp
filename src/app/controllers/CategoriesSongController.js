@@ -2,8 +2,8 @@ const httpStatus = require('http-status')
 const CategoriesService = require('../services/Categories.service')
 const { dataResponse } = require('../../utils/response')
 
-class CategoriesSongController{
-    async  index(req, res, next) {
+class CategoriesSongController {
+    async index(req, res, next) {
         try {
             const cates = await CategoriesService.getPage(req)
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, cates))
@@ -11,10 +11,12 @@ class CategoriesSongController{
             next(error)
         }
     }
-    
+
     async create(req, res, next) {
         try {
-            const saveCateSong = await CategoriesService.createCateSong(req.body)
+            const saveCateSong = await CategoriesService.createCateSong(
+                req.body
+            )
             res.status(httpStatus.CREATED).json(
                 dataResponse(
                     httpStatus.OK,
@@ -62,16 +64,25 @@ class CategoriesSongController{
 
     async detail(req, res, next) {
         try {
-            const id = req.params.id;
+            const id = req.params.id
             const detail = await CategoriesService.getDetail(id)
-            res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, detail)
-            )
+            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, detail))
         } catch (error) {
             next(error)
         }
     }
 
+    async search(req, res, next) {
+        try {
+            const search = req.query.q
+            const result = await CategoriesService.search(search)
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, result, 'search successfully')
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
-module.exports = new CategoriesSongController();
+module.exports = new CategoriesSongController()
