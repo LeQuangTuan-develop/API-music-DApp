@@ -6,6 +6,8 @@ const genreValidation = require('../app/validations/genre.validation')
 const validate = require('../app/middlewares/validate')
 const validateRole = require('../app/middlewares/validateRole')
 
+router.get('/search', GenreController.search)
+
 router.get(
     '/',
     passport.authenticate('jwt', { session: false }),

@@ -1,11 +1,11 @@
 // backend/create-index.js
-const elasticClient = require("./elastic-client");
+const elasticClient = require('./elastic-client')
 
 const createIndex = async (indexName) => {
-  await elasticClient.indices.create({ index: indexName });
-  console.log("Index created");
-};
+    await elasticClient.indices.create({ index: indexName })
+    console.log('Index created')
+}
 
-createIndex("playlists");
+createIndex('playlists')
 
-module.exports = createIndex;
+module.exports = createIndex

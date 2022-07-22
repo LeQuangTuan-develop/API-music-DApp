@@ -24,13 +24,13 @@ class UserService {
             const doSave = await TokenService.saveToken(
                 null,
                 user._id,
-                tokenTypes.REFRESH
+                tokenTypes.REFRESH,
             )
             return user
         } else {
             return await AuthService.getUserByAccountAndPassword(
                 data.username,
-                data.username
+                data.username,
             )
         }
     }
@@ -47,12 +47,12 @@ class UserService {
         } else if (user && user.username == data.username) {
             throw new ApiError(
                 httpStatus.CONFLICT,
-                'Your username already exists! Please choose another username...'
+                'Your username already exists! Please choose another username...',
             )
         } else {
             throw new ApiError(
                 httpStatus.CONFLICT,
-                'Your email has been used ! Please choose another email...'
+                'Your email has been used ! Please choose another email...',
             )
         }
     }
@@ -64,7 +64,7 @@ class UserService {
         if (!user)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This user does not exist'
+                'This user does not exist',
             )
         return user
     }
@@ -74,14 +74,18 @@ class UserService {
         if (!user)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This user does not exist'
+                'This user does not exist',
             )
 
-        Object.keys(body).forEach((key) => {
-            user[key] = body[key]
-        })
-        await user.save()
-        return user
+        await User.update(
+            {
+                ...body,
+            },
+            {
+                where: { _id: id },
+            },
+        )
+        return body
     }
 
     async deleteUser(id) {
@@ -93,7 +97,7 @@ class UserService {
         if (!deleteUser)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This user does not exist'
+                'This user does not exist',
             )
 
         return deleteUser

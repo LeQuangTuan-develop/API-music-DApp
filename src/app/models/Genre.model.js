@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             name: {
                 type: DataTypes.STRING,
+                unique: true,
                 allowNull: false,
             },
             description: {
@@ -34,6 +35,14 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
+            indexes: [
+                // add a FULLTEXT index
+                {
+                    type: 'FULLTEXT',
+                    name: 'fts_genres',
+                    fields: ['name', 'description'],
+                },
+            ],
             sequelize,
             timestamps: true,
         }

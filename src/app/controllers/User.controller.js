@@ -1,13 +1,16 @@
 const httpStatus = require('http-status')
 const UserService = require('../services/User.service')
 const { dataResponse } = require('../../utils/response')
+const { UserDto, UserDtos } = require('../dtos/user.dto')
 
 class UserController {
     // GET users
     async index(req, res, next) {
         try {
             const users = await UserService.getAllUsers()
-            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, users))
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, new UserDtos(users)),
+            )
         } catch (error) {
             next(error)
         }
@@ -16,9 +19,8 @@ class UserController {
     // GET users/:id
     async show(req, res, next) {
         try {
-            // const user = await UserService.getUserById(req.params.id)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, req.user)
+                dataResponse(httpStatus.OK, new UserDto(req.user)),
             )
         } catch (error) {
             next(error)
@@ -32,9 +34,9 @@ class UserController {
             res.status(httpStatus.CREATED).json(
                 dataResponse(
                     httpStatus.OK,
-                    saveUser,
-                    'Create new user successfully'
-                )
+                    new UserDto(saveUser),
+                    'Create new user successfully',
+                ),
             )
         } catch (error) {
             next(error)
@@ -49,9 +51,9 @@ class UserController {
             res.status(httpStatus.OK).json(
                 dataResponse(
                     httpStatus.OK,
-                    updateUser,
-                    'Update info user successfully'
-                )
+                    new UserDto(updateUser),
+                    'Update info user successfully',
+                ),
             )
         } catch (error) {
             next(error)
@@ -66,9 +68,9 @@ class UserController {
             res.status(httpStatus.OK).json(
                 dataResponse(
                     httpStatus.OK,
-                    deleteUser,
-                    'Delete user successfully'
-                )
+                    new UserDto(deleteUser),
+                    'Delete user successfully',
+                ),
             )
         } catch (error) {
             next(error)
@@ -79,7 +81,11 @@ class UserController {
         try {
             const users = await UserService.test()
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, users, 'Get all user successfully')
+                dataResponse(
+                    httpStatus.OK,
+                    new UserDtos(users),
+                    'Get all user successfully',
+                ),
             )
         } catch (error) {
             next(error)

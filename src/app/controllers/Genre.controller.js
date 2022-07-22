@@ -13,24 +13,24 @@ class GenreController {
         }
     }
 
-     // POST genres/:id
-     async create(req, res, next) {
+    // POST genres/:id
+    async create(req, res, next) {
         try {
             const saveGenre = await GenreService.createGenre(req.body)
             res.status(httpStatus.CREATED).json(
                 dataResponse(
                     httpStatus.OK,
                     saveGenre,
-                    'Create new genre successfully'
-                )
+                    'Create new genre successfully',
+                ),
             )
         } catch (error) {
             next(error)
         }
     }
 
-     // PUT genres/:id
-     async update(req, res, next) {
+    // PUT genres/:id
+    async update(req, res, next) {
         try {
             const id = req.params.id
             const updateGenre = await GenreService.updateGenre(id, req.body)
@@ -38,16 +38,16 @@ class GenreController {
                 dataResponse(
                     httpStatus.OK,
                     updateGenre,
-                    'Update info genre successfully'
-                )
+                    'Update info genre successfully',
+                ),
             )
         } catch (error) {
             next(error)
         }
     }
 
-     // DELETE genres/:id
-     async delete(req, res, next) {
+    // DELETE genres/:id
+    async delete(req, res, next) {
         try {
             const id = req.params.id
             const deleteGenre = await GenreService.deleteGenre(id)
@@ -55,8 +55,8 @@ class GenreController {
                 dataResponse(
                     httpStatus.OK,
                     deleteGenre,
-                    'Delete genre successfully'
-                )
+                    'Delete genre successfully',
+                ),
             )
         } catch (error) {
             next(error)
@@ -73,28 +73,37 @@ class GenreController {
         }
     }
 
-    async getAllElastic(req,res, next){
+    // GET /genres/search
+    async search(req, res, next) {
         try {
-            const result = await elasticClient.search({
-                index:"genres",
-                query:{match_all:{}},
-            })
+            const search = req.query.q
+            const result = await GenreService.search(search)
             res.status(httpStatus.OK).json(
-                dataResponse(
-                    httpStatus.OK,
-                    result.hits,
-                    'GetALL Successfully'
-                )
+                dataResponse(httpStatus.OK, result, 'search successfully'),
             )
         } catch (error) {
             next(error)
         }
     }
 
-    async createGenresElastic(req,res, next){
+    async getAllElastic(req, res, next) {
+        try {
+            const result = await elasticClient.search({
+                index: 'genres',
+                query: { match_all: {} },
+            })
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, result.hits, 'GetALL Successfully'),
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async createGenresElastic(req, res, next) {
         try {
             const result = await elasticClient.index({
-                index:"genres",
+                index: 'genres',
                 document: {
                     name: req.body.name,
                     description: req.body.description,
@@ -105,61 +114,58 @@ class GenreController {
                 dataResponse(
                     httpStatus.OK,
                     result.hits,
-                    'Create in Elastic Successfully'
-                )
+                    'Create in Elastic Successfully',
+                ),
             )
         } catch (error) {
             next(error)
         }
     }
 
-    async  deleteGenresElastic(req,res, next){
+    async deleteGenresElastic(req, res, next) {
         try {
             const result = await elasticClient.delete({
-                index: "genres",
+                index: 'genres',
                 id: req.query._id,
-            }) 
+            })
             res.status(httpStatus.OK).json(
                 dataResponse(
                     httpStatus.OK,
                     result.hits,
-                    'Delete in Elastic Successfully'
-                )
+                    'Delete in Elastic Successfully',
+                ),
             )
         } catch (error) {
             next(error)
         }
     }
 
-    async  searchGenres(req,res, next){
+    async searchGenres(req, res, next) {
         try {
             console.log(req.query)
             console.log(req.query.query)
             const result = await elasticClient.search({
-                index: "genres",
-                "query" : {
-                    "multi_match" : {
-                        "query":     req.query.query,
-                        "type":       "phrase_prefix",
-                        "fields":     [ "name", "description","imageUrl" ]
-                    }
-                }
-               
+                index: 'genres',
+                query: {
+                    multi_match: {
+                        query: req.query.query,
+                        type: 'phrase_prefix',
+                        fields: ['name', 'description', 'imageUrl'],
+                    },
+                },
             })
-           
+
             res.status(httpStatus.OK).json(
                 dataResponse(
                     httpStatus.OK,
                     result.hits,
-                    'Search in Elastic Successfully'
-                )
+                    'Search in Elastic Successfully',
+                ),
             )
         } catch (error) {
             next(error)
         }
     }
-
-
 }
 
-module.exports = new GenreController();
+module.exports = new GenreController()
