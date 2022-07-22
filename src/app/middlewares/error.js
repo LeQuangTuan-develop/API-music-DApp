@@ -1,14 +1,18 @@
 const httpStatus = require('http-status')
-
+const { ValidationError } = require('sequelize')
 const ApiError = require('../../utils/apiError')
 
 const errorConverter = (err, req, res, next) => {
     let error = err
 
     if (!(error instanceof ApiError)) {
-        const statusCode = error.statusCode
-            ? httpStatus.BAD_REQUEST
-            : httpStatus.INTERNAL_SERVER_ERROR
+        const statusCode =
+            error.statusCode || error instanceof ValidationError
+                ? httpStatus.BAD_REQUEST
+                : httpStatus.INTERNAL_SERVER_ERROR
+        if (error instanceof ValidationError) {
+            error = error.errors[0]
+        }
         const message = error.message || httpStatus[statusCode]
         error = new ApiError(statusCode, message, false, err.stack)
     }

@@ -28,29 +28,8 @@ class GenreService {
         if (!genre)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This genre does not exist'
+                'This genre does not exist',
             )
-
-        const genre1 = await Genre.findAll({
-            where: {
-                [Op.and]: [
-                    {
-                        name: body.name,
-                    },
-                    {
-                        _id: {
-                            [Op.ne]: id,
-                        },
-                    },
-                ],
-            },
-        })
-
-        console.log(genre1)
-
-        if (genre1.length > 0) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'This genre is exist')
-        }
 
         await Genre.update(
             {
@@ -58,7 +37,7 @@ class GenreService {
             },
             {
                 where: { _id: id },
-            }
+            },
         )
         return body
     }
@@ -72,7 +51,7 @@ class GenreService {
         if (!deleteGenre)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This genre does not exist'
+                'This genre does not exist',
             )
 
         return deleteGenre
@@ -83,7 +62,7 @@ class GenreService {
         if (!genre)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This genre does not exist'
+                'This genre does not exist',
             )
         return genre
     }

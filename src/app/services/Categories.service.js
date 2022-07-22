@@ -8,7 +8,7 @@ class CategoriesService {
         if (await SongCategory.findOne({ where: { name: data.name } })) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This cate of song already taken'
+                'This cate of song already taken',
             )
         }
         const newSongCategory = new SongCategory(data)
@@ -46,27 +46,8 @@ class CategoriesService {
         if (!cate)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This genre does not exist'
+                'This genre does not exist',
             )
-
-        const cate1 = await SongCategory.findAll({
-            where: {
-                [Op.and]: [
-                    {
-                        name: body.name,
-                    },
-                    {
-                        _id: {
-                            [Op.ne]: id,
-                        },
-                    },
-                ],
-            },
-        })
-
-        if (cate1.length > 0) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'This genre is exist')
-        }
 
         await Genre.update(
             {
@@ -74,7 +55,7 @@ class CategoriesService {
             },
             {
                 where: { _id: id },
-            }
+            },
         )
         return body
     }
@@ -88,7 +69,7 @@ class CategoriesService {
         if (!deleteCate)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This cate does not exist'
+                'This cate does not exist',
             )
 
         return deleteCate
@@ -99,7 +80,7 @@ class CategoriesService {
         if (!cateSong)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This cate does not exist'
+                'This cate does not exist',
             )
 
         return cateSong
