@@ -13,6 +13,26 @@ class SongController {
             next(error)
         }
     }
+    //get Songs
+    async index(req, res, next) {
+        try {
+            const songs = await SongService.getAllSongs()
+            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, songs))
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    //get detail
+    async getDetail(req,res,next){
+        try {
+            const id = req.params.id
+            const songs = await SongService.getDetail(id)
+            res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, songs))
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = new SongController()

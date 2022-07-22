@@ -17,6 +17,22 @@ class SongService {
 
         return createSong
     }
+
+    async getAllSongs() {
+        console.log("run here")
+        return await Song.findAll()
+    }
+
+    async getDetail(id){
+        const song = await Song.findByPk(id)
+        if(!song){
+            throw new ApiError(
+                httpStatus.BAD_REQUEST,
+                'This song does not exist',
+            )
+        }
+        return song;
+    }
 }
 
 module.exports = new SongService()
