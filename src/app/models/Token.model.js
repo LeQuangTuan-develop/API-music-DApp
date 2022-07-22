@@ -24,20 +24,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             token: {
-                type: DataTypes.STRING(128),
+                type: DataTypes.STRING(256),
                 unique: true,
-                allowNull: false,
             },
             type: {
                 type: DataTypes.STRING(50),
                 allowNull: false,
-            },
-            expiredDate: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                validate: {
-                    isDate: true,
-                },
             },
             blackListed: {
                 type: DataTypes.BOOLEAN,

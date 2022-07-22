@@ -14,7 +14,7 @@ const db = require('./src/app/models/index')
 const route = require('./src/routes')
 const { jwtStrategy } = require('./src/app/middlewares/passport')
 const { errorConverter, errorHandler } = require('./src/app/middlewares/error')
-
+const elastic = require('./src/configs/elastic-client')
 const app = express()
 
 const port = process.env.PORT || 4000
@@ -24,9 +24,13 @@ var accessLogStream = rfs.createStream('access.log', {
     path: path.join(__dirname, 'log'),
 })
 
+const corsOptions = {
+    exposedHeaders: ['Authorization-access', 'Authorization-refresh'],
+}
+
 // middleware
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(helmet())
 app.use(
     isProduction
@@ -49,6 +53,12 @@ passport.use('jwt', jwtStrategy)
 app.use(passport.initialize())
 
 app.use('/api', route)
+
+app.use('/', function (req, res, next) {
+    res.status(200).json({
+        message: 'Chicken Floor say ò ó o',
+    })
+})
 
 // convert error to ApiError, if needed
 app.use(errorConverter)

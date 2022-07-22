@@ -3,14 +3,18 @@ const bcrypt = require('bcryptjs')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const TokenService = require('./Token.service')
+const { Op } = require('sequelize')
+const TokenRepository = require('../repositories/Token.repository')
 
 class AuthService {
-    async getUserByEmailAndPassword(email, password) {
-        const user = await User.findOne({ where: { email: email } })
+    async getUserByAccountAndPassword(account, password) {
+        let user = await User.findOne({
+            where: { [Op.or]: [{ username: account }, { email: account }] },
+        })
         if (!user || !(await bcrypt.compare(password, user.password))) {
             throw new ApiError(
                 httpStatus.UNAUTHORIZED,
-                'Incorrect email or password'
+                'Your email or password is incorrect'
             )
         }
         return user
@@ -20,15 +24,16 @@ class AuthService {
         const refreshTokenDoc = await TokenService.getTokenByRefresh(
             refreshToken
         )
-        await refreshTokenDoc.remove()
-        return true
+        if (!refreshTokenDoc) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Wrong Refresh Token')
+        }
+        const logoutToken = await TokenRepository.logout(refreshToken)
+        return logoutToken
     }
 
     responseSetHeader(res, tokens) {
-        res.setHeader('Authorization-access', tokens.access.token)
-        res.setHeader('Authorization-access-expires', tokens.access.expires)
-        res.setHeader('Authorization-refresh', tokens.refresh.token)
-        res.setHeader('Authorization-refresh-expires', tokens.refresh.expires)
+        res.setHeader('Authorization-access', tokens.accessToken)
+        res.setHeader('Authorization-refresh', tokens.refreshToken)
         return res
     }
 }

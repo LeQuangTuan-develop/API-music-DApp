@@ -8,7 +8,9 @@ module.exports = {
     for (var i = 0;i < 100;i++) {
       Songcategory.push({
         name: faker.music.genre(),
-        imageUrl:faker.image.imageUrl(),
+        image_url:faker.image.cats(),
+        createdAt: new Date(),
+        updatedAt: new Date()
       })
       
     }
@@ -25,4 +27,3 @@ module.exports = {
      await queryInterface.bulkDelete('songcategories', null, {})
   }
 };
-

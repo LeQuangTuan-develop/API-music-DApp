@@ -9,7 +9,7 @@ module.exports = {
       Genre.push({
         name: faker.music.genre(),
         description:null,
-        imageUrl: faker.image.imageUrl(),
+        image_url:faker.image.cats(),
         createdAt: new Date(),
         updatedAt: new Date()
       })
