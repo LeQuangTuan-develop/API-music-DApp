@@ -1,3 +1,4 @@
+
 const Joi = require('joi')
 
 const { password } = require('./customize.validation')
@@ -23,8 +24,15 @@ const registerSchema = {
     }),
 }
 
+const forgotPasswordSchema = {
+    body: Joi.object().keys({
+        email: Joi.string().required().email(),
+    }),
+}
+
 module.exports = {
     loginSchema,
     refreshSchema,
     registerSchema,
+    forgotPasswordSchema,
 }

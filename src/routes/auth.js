@@ -30,4 +30,12 @@ router.post(
     AuthController.refreshTokens
 )
 
+router.post(
+    '/forgotpassword',
+    validate(authValidation.forgotPasswordSchema),
+    AuthController.forgotPassword
+)
+
+
+
 module.exports = router
