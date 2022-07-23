@@ -1,12 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const UserController = require('../app/controllers/User.controller')
+const PlaylistController = require('../app/controllers/Playlist.controller')
 const passport = require('passport')
-
-router.get(
-    '/playlist',
-    UserController.randomPlaylist
-)
 
 router.get('/test', UserController.test)
 router.get(

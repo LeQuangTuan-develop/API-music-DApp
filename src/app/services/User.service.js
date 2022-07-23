@@ -103,6 +103,36 @@ class UserService {
         return deleteUser
     }
 
+    randomString() {
+        const result = Math.random().toString(36).substring(2, 12)
+        console.log(result)
+        return result
+    }
+
+    async getUserByEmail(email) {
+        const user = await User.findOne({ where: { email: email } })
+        if (!user) {
+            throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email')
+        }
+        return user
+    }
+
+    async updateUserByEmail(email, body) {
+        const user = await User.findByPk(id)
+        if (!user)
+            throw new ApiError(
+                httpStatus.BAD_REQUEST,
+                'This user does not exist',
+            )
+
+        Object.keys(body).forEach((key) => {
+            console.log(body[key])
+            user[key] = body[key]
+        })
+        await user.save()
+        return user
+    }
+
     async test() {
         const users = await userRepository.test()
         return users

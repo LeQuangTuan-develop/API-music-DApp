@@ -150,25 +150,29 @@ class AuthController {
     // POST auth/forgotpassword
     async forgotPassword(req, res, next) {
         try {
-            var email = req.body.email 
-            const user = await MailService.getUserByEmail(email)
-            user.password = MailService.randomString()
-            await MailService.sendEmail(req, res, email, 'New password', user.password)
-            await MailService.updateUserByEmail(email, user)
+            var email = req.body.email
+            const user = await UserService.getUserByEmail(email)
+            user.password = UserService.randomString()
+            await MailService.sendEmail(
+                req,
+                res,
+                email,
+                'New password',
+                user.password,
+            )
+            await UserService.updateUserByEmail(email, user)
             res.status(httpStatus.OK).json(
                 dataResponse(
                     httpStatus.OK,
                     true,
-                    'I had send a new password to your email. Please check'
-                )
+                    'I had send a new password to your email. Please check',
+                ),
             )
-            res.redirect('/login');
+            res.redirect('/login')
         } catch (error) {
             next(error)
         }
     }
-
-   
 }
 
 module.exports = new AuthController()
