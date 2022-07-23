@@ -1,21 +1,20 @@
-const filters = (req,res,next) =>{
+const filters = (req, res, next) => {
+    const cateAsNumber = Number.parseInt(req.query._cate)
 
-const cateAsNumber = Number.parseInt(req.query._cate)
+    let cate = 1
 
-let cate = 1
+    if (Number.isNaN(cateAsNumber)) {
+        cate = 1
+    }
 
-if(Number.isNaN(cateAsNumber)){
-    cate = 1
+    if (!Number.isNaN(cateAsNumber) && cateAsNumber > 0) {
+        cate = cateAsNumber
+    }
+
+    req.query._cate = cate
+    return next()
 }
 
-if(!Number.isNaN(cateAsNumber) && cateAsNumber > 0) {
-    cate = cateAsNumber
-}
-
-req.query._cate = cate
-return next()
-}
-
-module.exports ={
-filters
+module.exports = {
+    filters,
 }

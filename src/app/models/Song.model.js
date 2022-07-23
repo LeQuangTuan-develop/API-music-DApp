@@ -38,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
             },
             name: {
                 type: DataTypes.STRING,
-                unique: true,
                 allowNull: false,
                 validate: {
                     len: [3, 255],
@@ -69,7 +68,17 @@ module.exports = (sequelize, DataTypes) => {
             description: {
                 type: DataTypes.STRING,
             },
-            // image
+            singer: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            thumbnail: {
+                type: DataTypes.STRING(500),
+                validate: { isUrl: true },
+            },
+            tone: {
+                type: DataTypes.STRING,
+            },
             audioUrl: {
                 type: DataTypes.STRING(500),
                 validate: { isUrl: true },

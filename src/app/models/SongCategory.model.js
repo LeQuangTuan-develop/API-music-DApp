@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             name: {
                 type: DataTypes.STRING,
+                unique: true,
                 allowNull: false,
             },
             imageUrl: {
@@ -31,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
+            indexes: [
+                // add a FULLTEXT index
+                { type: 'FULLTEXT', name: 'fts_cate', fields: ['name'] },
+            ],
             sequelize,
             timestamps: false,
         }

@@ -12,21 +12,22 @@ router.get('/test', UserController.test)
 router.get(
     '/',
     passport.authenticate('jwt', { session: false }),
-    UserController.index
+    UserController.index,
 )
 router.get(
-    '/:id',
+    '/info',
     passport.authenticate('jwt', { session: false }),
-    UserController.show
+    UserController.show,
 )
 router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),
-    UserController.update
+    UserController.update,
 )
 router.delete(
     '/:id',
-    UserController.delete
+    passport.authenticate('jwt', { session: false }),
+    UserController.delete,
 )
 
 module.exports = router

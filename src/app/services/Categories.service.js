@@ -2,13 +2,13 @@ const httpStatus = require('http-status')
 const { SongCategory } = require('../models')
 const ApiError = require('../../utils/apiError')
 const { Op } = require('sequelize')
+const SongCategoryRepository = require('../repositories/SongCategory.repository')
 class CategoriesService {
-
     async createCateSong(data) {
         if (await SongCategory.findOne({ where: { name: data.name } })) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This cate of song already taken'
+                'This cate of song already taken',
             )
         }
         const newSongCategory = new SongCategory(data)
@@ -23,8 +23,8 @@ class CategoriesService {
             offset: req.query._page * req.query._size,
         })
 
-        if (!Number.isNaN(req.query._page ) && req.query._page  > 0) {
-            if(req.query._page >Math.ceil(cates.count/req.query._size)){
+        if (!Number.isNaN(req.query._page) && req.query._page > 0) {
+            if (req.query._page > Math.ceil(cates.count / req.query._size)) {
                 req.query._size = 0
             }
         }
@@ -32,9 +32,9 @@ class CategoriesService {
         const value = {
             countAll: cates.count,
             countItem: req.query._size,
-            page: req.query._page +1,
-            data: cates.rows, 
-            totalPages: Math.ceil(cates.count/req.query._size)
+            page: req.query._page + 1,
+            data: cates.rows,
+            totalPages: Math.ceil(cates.count / req.query._size),
         }
 
         return value
@@ -46,27 +46,8 @@ class CategoriesService {
         if (!cate)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This genre does not exist'
+                'This genre does not exist',
             )
-
-        const cate1 = await SongCategory.findAll({
-            where: {
-                [Op.and]: [
-                    {
-                        name: body.name,
-                    },
-                    {
-                        _id: {
-                            [Op.ne]: id,
-                        },
-                    },
-                ],
-            },
-        })
-
-        if (cate1.length > 0) {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'This genre is exist')
-        }
 
         await Genre.update(
             {
@@ -74,7 +55,7 @@ class CategoriesService {
             },
             {
                 where: { _id: id },
-            }
+            },
         )
         return body
     }
@@ -88,7 +69,7 @@ class CategoriesService {
         if (!deleteCate)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This cate does not exist'
+                'This cate does not exist',
             )
 
         return deleteCate
@@ -99,10 +80,15 @@ class CategoriesService {
         if (!cateSong)
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'This cate does not exist'
+                'This cate does not exist',
             )
 
         return cateSong
+    }
+
+    async search(search) {
+        const result = await SongCategoryRepository.search(search)
+        return result
     }
 }
 
