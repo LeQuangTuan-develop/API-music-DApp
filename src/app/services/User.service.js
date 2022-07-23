@@ -1,11 +1,11 @@
 const httpStatus = require('http-status')
 const bcrypt = require('bcryptjs')
-const { tokenTypes } = require('../../configs/tokens')
+const { tokenTypes } = require('../../configs/tokens.config')
 const TokenService = require('../services/Token.service')
 const { User } = require('../models')
 const ApiError = require('../../utils/apiError')
 const AuthService = require('../services/Auth.service')
-const userRepository = require('../repositories/user.repositoty')
+const userRepository = require('../repositories/User.repositoty')
 const { Op } = require('sequelize')
 class UserService {
     async getAllUsers() {

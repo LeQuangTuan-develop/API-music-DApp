@@ -3,7 +3,7 @@ const AuthService = require('../services/Auth.service')
 const TokenService = require('../services/Token.service')
 const UserService = require('../services/User.service')
 const { dataResponse } = require('../../utils/response')
-const { tokenTypes } = require('../../configs/tokens')
+const { tokenTypes } = require('../../configs/tokens.config')
 const moment = require('moment')
 
 class AuthController {

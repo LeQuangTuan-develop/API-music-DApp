@@ -1,4 +1,4 @@
-const { pagination, filter, orderType } = require('../../configs/query')
+const { pagination, filter, orderType } = require('../../configs/query.config')
 
 let page = pagination.PAGE_DEFAULT
 let size = pagination.SIZE_DEFAULT
@@ -44,7 +44,7 @@ const handleSortQuery = (req) => {
         }
 
         orderByArray = fieldArr.map((field, index) => {
-            let orderType = 'desc'
+            let orderType = orderType.ORDER_TYPE_DEFAULT
             if (orderTypeArray[index]) {
                 orderType = orderTypeArray[index]
             }

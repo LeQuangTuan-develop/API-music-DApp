@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const CategoriesSongController = require('../app/controllers/CategoriesSongController')
+const CategoriesSongController = require('../app/controllers/SongCategory.controller')
 const passport = require('passport')
 const cateValidate = require('../app/validations/cate.validations')
 const validate = require('../app/middlewares/validate')

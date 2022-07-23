@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const { pagination } = require('../../configs/query')
+const { pagination } = require('../../configs/query.config')
 
 class BaseRepository {
     constructor(model) {

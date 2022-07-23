@@ -1,7 +1,6 @@
 const { Genre } = require('../models')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
-const { Op } = require('sequelize')
 const GenreRepository = require('../repositories/Genre.repository')
 
 class GenreService {

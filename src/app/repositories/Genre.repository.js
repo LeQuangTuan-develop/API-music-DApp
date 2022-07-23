@@ -1,5 +1,4 @@
 const { Genre } = require('../models')
-const { Op } = require('sequelize')
 const Sequelize = require('sequelize')
 const BaseRepository = require('./Base.repository')
 
