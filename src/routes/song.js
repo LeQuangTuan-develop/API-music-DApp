@@ -1,4 +1,5 @@
 const express = require('express')
+const { route } = require('express/lib/router')
 const router = express.Router()
 const passport = require('passport')
 const SongController = require('../app/controllers/Song.controller')
@@ -13,14 +14,14 @@ router.post(
     SongController.create
 )
 
+router.get('/search', SongController.searchSong)
+
 router.get(
     '/',
     passport.authenticate('jwt', { session: false }),
     // validateRole,
     SongController.index
 )
-
-
 router.get(
     '/:id',
     passport.authenticate('jwt', { session: false }),
