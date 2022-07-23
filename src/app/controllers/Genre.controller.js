@@ -6,7 +6,7 @@ class GenreController {
     // GET Genres
     async index(req, res, next) {
         try {
-            const genres = await GenreService.getAllGenres()
+            const genres = await GenreService.getAllGenres(req.query)
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, genres))
         } catch (error) {
             next(error)

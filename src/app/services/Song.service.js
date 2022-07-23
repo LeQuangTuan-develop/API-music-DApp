@@ -19,19 +19,18 @@ class SongService {
     }
 
     async getAllSongs() {
-        console.log("run here")
         return await Song.findAll()
     }
 
-    async getDetail(id){
+    async getDetail(id) {
         const song = await Song.findByPk(id)
-        if(!song){
+        if (!song) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
                 'This song does not exist',
             )
         }
-        return song;
+        return song
     }
 }
 

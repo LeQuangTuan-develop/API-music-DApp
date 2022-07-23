@@ -4,40 +4,41 @@ const CategoriesSongController = require('../app/controllers/CategoriesSongContr
 const passport = require('passport')
 const cateValidate = require('../app/validations/cate.validations')
 const validate = require('../app/middlewares/validate')
-const { pagination } = require('../app/middlewares/paginate')
+const validateRole = require('../app/middlewares/validateRole')
+const { handleQuery } = require('../app/middlewares/query')
 
 router.get('/search', CategoriesSongController.search)
-router.get(
-    '/',
-    passport.authenticate('jwt', { session: false }),
-    pagination,
-    CategoriesSongController.index
-)
+
+router.get('/', handleQuery, CategoriesSongController.index)
 
 router.post(
     '/',
     passport.authenticate('jwt', { session: false }),
+    validateRole,
     validate(cateValidate.createCateSchema),
-    CategoriesSongController.create
+    CategoriesSongController.create,
 )
 
 router.get(
     '/:id',
     passport.authenticate('jwt', { session: false }),
-    CategoriesSongController.detail
+    validateRole,
+    CategoriesSongController.detail,
 )
 
 router.put(
     '/:id',
     passport.authenticate('jwt', { session: false }),
     validate(cateValidate.updateCateSchema),
-    CategoriesSongController.update
+    validateRole,
+    CategoriesSongController.update,
 )
 
 router.delete(
     '/:id',
     passport.authenticate('jwt', { session: false }),
-    CategoriesSongController.delete
+    validateRole,
+    CategoriesSongController.delete,
 )
 
 module.exports = router

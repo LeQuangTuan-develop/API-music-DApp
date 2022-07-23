@@ -57,7 +57,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "lint-staged": {
-    "src/**/*.{js,json}": "prettier --single-quote --trailing-comma all --tab-width 4 --semi false --print-width 80 --write"
+    "src/**/*.{js,json}": "prettier --single-quote --trailing-comma all --tab-width 4 --print-width 80 --write"
   },
   "repository": {
     "type": "git",
