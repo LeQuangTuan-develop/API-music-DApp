@@ -96,9 +96,7 @@ class BaseRepository {
     }
 
     clearQuery() {
-        this.query = {
-            where: {},
-        }
+        this.query = {}
     }
 
     async findAndPaginate(

@@ -44,11 +44,11 @@ const handleSortQuery = (req) => {
         }
 
         orderByArray = fieldArr.map((field, index) => {
-            let orderType = orderType.ORDER_TYPE_DEFAULT
+            let orderTypeVar = orderType.ORDER_TYPE_DEFAULT
             if (orderTypeArray[index]) {
-                orderType = orderTypeArray[index]
+                orderTypeVar = orderTypeArray[index]
             }
-            return [field, orderType]
+            return [field, orderTypeVar]
         })
 
         req.query.orderBy = orderByArray
