@@ -1,6 +1,6 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt')
 const httpStatus = require('http-status')
-const ApiError = require('../../utils/apiError')
+const ApiError = require('../../utils/ApiError.util')
 
 const validateRole = (req,resp,next) => {
     try {

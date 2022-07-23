@@ -1,5 +1,5 @@
 const httpStatus = require('http-status')
-const { dataResponse } = require('../../utils/response')
+const { dataResponse } = require('../../utils/Response.util')
 const PlayListService = require('../services/PlayList.service')
 
 class PlayListController{
@@ -12,3 +12,4 @@ class PlayListController{
         }
     }
 }
+module.exports = new PlayListController()

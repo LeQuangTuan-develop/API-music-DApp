@@ -13,8 +13,8 @@ dotenv.config()
 
 const db = require('./src/app/models/index')
 const route = require('./src/routes')
-const { jwtStrategy } = require('./src/app/middlewares/passport')
-const { errorConverter, errorHandler } = require('./src/app/middlewares/error')
+const { jwtStrategy } = require('./src/app/middlewares/Passport.middleware')
+const { errorConverter, errorHandler } = require('./src/app/middlewares/Error.middleware')
 
 const app = express()
 

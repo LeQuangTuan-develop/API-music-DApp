@@ -1,8 +1,9 @@
-const {PlayList } = require('../model')
+const {Playlist } = require('../models')
 
 class PlayListRepository {
     async findlistNew() {
-        const lists = await PlayList.findAll({
+        console.log('run')
+        const lists = await Playlist.findAll({
             attributes: {
                 exclude: ['createdAt', 'updatedAt'],
             },

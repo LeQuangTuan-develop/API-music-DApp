@@ -1,10 +1,10 @@
 const httpStatus = require('http-status')
 const UserService = require('../services/User.service')
-const { dataResponse } = require('../../utils/response')
+const { dataResponse } = require('../../utils/Response.util')
 
 class UserController {
     // GET users
-    async getAllUsers(req, res, next) {
+    async index(req, res, next) {
         try {
             const users = await UserService.getAllUsers()
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, users))
@@ -14,7 +14,7 @@ class UserController {
     }
 
     // GET users/:id
-    async getUser(req, res, next) {
+    async show(req, res, next) {
         try {
             // const user = await UserService.getUserById(req.params.id)
             res.status(httpStatus.OK).json(

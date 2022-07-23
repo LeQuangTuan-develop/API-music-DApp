@@ -1,6 +1,6 @@
 const httpStatus = require('http-status')
 const CategoriesService = require('../services/Categories.service')
-const { dataResponse } = require('../../utils/response')
+const { dataResponse } = require('../../utils/Response.util')
 
 class CategoriesSongController{
     async index(req, res, next) {

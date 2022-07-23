@@ -1,5 +1,5 @@
 const { Genre } = require('../models')
-const ApiError = require('../../utils/apiError')
+const ApiError = require('../../utils/ApiError.util')
 const httpStatus = require('http-status')
 
 class GenreService{

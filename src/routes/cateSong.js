@@ -3,7 +3,7 @@ const router = express.Router()
 const CategoriesSongController = require('../app/controllers/CategoriesSongController')
 const passport = require('passport')
 const cateValidate = require('../app/validations/cate.validations')
-const validate = require('../app/middlewares/validate')
+const validate = require('../app/middlewares/Validate.middleware')
 
 router.get(
     '/',

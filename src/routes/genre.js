@@ -3,8 +3,8 @@ const router = express.Router()
 const passport = require('passport')
 const GenreController = require('../app/controllers/Genre.controller')
 const genreValidation = require('../app/validations/genre.validation')
-const validate = require('../app/middlewares/validate')
-const validateRole = require('../app/middlewares/validateRole')
+const validate = require('../app/middlewares/Validate.middleware')
+const validateRole = require('../app/middlewares/ValidateRole.middleware')
 
 router.get(
     '/',

@@ -1,6 +1,6 @@
 const httpStatus = require('http-status')
 const GenreService = require('../services/Genre.service')
-const { dataResponse } = require('../../utils/response')
+const { dataResponse } = require('../../utils/Response.util')
 class GenreController {
     // GET Genres
     async index(req, res, next) {
