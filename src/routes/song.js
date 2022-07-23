@@ -5,6 +5,7 @@ const passport = require('passport')
 const SongController = require('../app/controllers/Song.controller')
 const validate = require('../app/middlewares/validate')
 const { createSongSchema } = require('../app/validations/song.validation')
+const validateRole = require('../app/middlewares/validateRole')
 
 router.post(
     '/',
@@ -13,9 +14,19 @@ router.post(
     SongController.create
 )
 
+router.get('/search', SongController.searchSong)
+
 router.get(
-    '/search',
-    SongController.searchSong
+    '/',
+    passport.authenticate('jwt', { session: false }),
+    // validateRole,
+    SongController.index
+)
+router.get(
+    '/:id',
+    passport.authenticate('jwt', { session: false }),
+    validateRole,
+    SongController.getDetail
 )
 
 module.exports = router

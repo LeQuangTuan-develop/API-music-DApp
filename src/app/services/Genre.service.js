@@ -6,7 +6,6 @@ const GenreRepository = require('../repositories/Genre.repository')
 
 class GenreService {
     async getAllGenres() {
-        console.log('run here')
         return await Genre.findAll()
     }
 

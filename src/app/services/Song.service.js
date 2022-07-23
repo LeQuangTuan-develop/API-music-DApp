@@ -16,6 +16,7 @@ class SongService {
         return createSong
     }
 
+
     async searchSong(query) {
         const result = await elasticClient.search({
             index: 'song',
@@ -28,6 +29,22 @@ class SongService {
             },
         })
         return result.hits
+    }
+
+    async getAllSongs() {
+        console.log("run here")
+        return await Song.findAll()
+    }
+
+    async getDetail(id){
+        const song = await Song.findByPk(id)
+        if(!song){
+            throw new ApiError(
+                httpStatus.BAD_REQUEST,
+                'This song does not exist',
+            )
+        }
+        return song;
     }
 }
 
