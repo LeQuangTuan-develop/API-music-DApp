@@ -4,7 +4,6 @@ const authRouter = require('./auth')
 const genreRouter = require('./genre')
 const catesRouter = require('./cateSong')
 const songRouter = require('./song')
-const searchRouter = require('./elasticSearch')
 
 const apiRoute = express()
 

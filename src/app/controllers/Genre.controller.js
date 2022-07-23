@@ -73,6 +73,19 @@ class GenreController {
         }
     }
 
+    // GET /genres/search
+    async search(req, res, next) {
+        try {
+            const search = req.query.q
+            const result = await GenreService.search(search)
+            res.status(httpStatus.OK).json(
+                dataResponse(httpStatus.OK, result, 'Search successfully'),
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
+
 }
 
 module.exports = new GenreController()

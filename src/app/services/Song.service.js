@@ -6,9 +6,9 @@ class SongService {
         data.lyricRendered = JSON.stringify(data.lyricRendered)
         const newSong = new Song(data)
         const createSong = await newSong.save()
-
         const saveToElasticSearch = await elasticClient.index({
             index: 'song',
+            id: createSong._id,
             document: {
                 ...data,
             },
