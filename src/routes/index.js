@@ -13,6 +13,5 @@ apiRoute.use('/users', userRouter)
 apiRoute.use('/auth', authRouter)
 apiRoute.use('/genres', genreRouter)
 apiRoute.use('/songs', songRouter)
-apiRoute.use('/search', searchRouter)
 
 module.exports = apiRoute
