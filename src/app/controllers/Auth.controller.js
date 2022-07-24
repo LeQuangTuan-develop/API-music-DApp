@@ -3,6 +3,8 @@ const AuthService = require('../services/Auth.service')
 const TokenService = require('../services/Token.service')
 const UserService = require('../services/User.service')
 const { dataResponse } = require('../../utils/response')
+const { default: isEmail } = require('validator/lib/isEmail')
+const MailService = require('../services/Mail.service')
 const { tokenTypes } = require('../../configs/tokens')
 const moment = require('moment')
 
@@ -144,6 +146,29 @@ class AuthController {
             next(error)
         }
     }
+
+    // POST auth/forgotpassword
+    async forgotPassword(req, res, next) {
+        try {
+            var email = req.body.email 
+            const user = await MailService.getUserByEmail(email)
+            user.password = MailService.randomString()
+            await MailService.sendEmail(req, res, email, 'New password', user.password)
+            await MailService.updateUserByEmail(email, user)
+            res.status(httpStatus.OK).json(
+                dataResponse(
+                    httpStatus.OK,
+                    true,
+                    'I had send a new password to your email. Please check'
+                )
+            )
+            res.redirect('/login');
+        } catch (error) {
+            next(error)
+        }
+    }
+
+   
 }
 
 module.exports = new AuthController()
