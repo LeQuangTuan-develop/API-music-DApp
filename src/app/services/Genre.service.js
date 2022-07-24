@@ -1,12 +1,20 @@
 const { Genre } = require('../models')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
-const { Op } = require('sequelize')
 const GenreRepository = require('../repositories/Genre.repository')
 
 class GenreService {
-    async getAllGenres() {
-        return await Genre.findAll()
+    async getAllGenres(query) {
+        const fieldAllow = ['name']
+        const value = GenreRepository.findAndPaginate(
+            query.conditions,
+            query.orderBy || [],
+            query._page,
+            query._size,
+            fieldAllow,
+        )
+
+        return value
     }
 
     async createGenre(data) {

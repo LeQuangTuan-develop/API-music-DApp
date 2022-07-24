@@ -11,39 +11,37 @@ const router = express.Router()
 router.post(
     '/login',
     validate(authValidation.loginSchema),
-    AuthController.login
+    AuthController.login,
 )
 
 router.post(
     '/login-google',
     validate(authValidation.googleAccountSchema),
-    AuthController.handleLoginWithGoogle
+    AuthController.handleLoginWithGoogle,
 )
 router.post(
     '/logout',
     validate(authValidation.refreshSchema),
     passport.authenticate('jwt', { session: false }),
-    AuthController.logout
+    AuthController.logout,
 )
 // POST api/v1/auth/register
 router.post(
     '/register',
     validate(authValidation.registerSchema),
-    AuthController.register
+    AuthController.register,
 )
 
 router.post(
     '/refresh',
     validate(authValidation.refreshSchema),
-    AuthController.refreshTokens
+    AuthController.refreshTokens,
 )
 
 router.post(
     '/forgotpassword',
     validate(authValidation.forgotPasswordSchema),
-    AuthController.forgotPassword
+    AuthController.forgotPassword,
 )
-
-
 
 module.exports = router

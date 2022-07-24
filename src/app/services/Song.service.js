@@ -1,5 +1,5 @@
 const { Song } = require('../models')
-const elasticClient = require('../../configs/elastic-client')
+const elasticClient = require('../../configs/elastic-client.config')
 
 class SongService {
     async createSong(data) {
@@ -16,7 +16,6 @@ class SongService {
         return createSong
     }
 
-
     async searchSong(query) {
         const result = await elasticClient.search({
             index: 'song',
@@ -32,19 +31,18 @@ class SongService {
     }
 
     async getAllSongs() {
-        console.log("run here")
         return await Song.findAll()
     }
 
-    async getDetail(id){
+    async getDetail(id) {
         const song = await Song.findByPk(id)
-        if(!song){
+        if (!song) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
                 'This song does not exist',
             )
         }
-        return song;
+        return song
     }
 }
 
