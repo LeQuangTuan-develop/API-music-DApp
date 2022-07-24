@@ -1,10 +1,10 @@
 const { pagination, filter, orderType } = require('../../configs/query.config')
 
-let page = pagination.PAGE_DEFAULT
-let size = pagination.SIZE_DEFAULT
-let sizeMax = pagination.SIZE_MAX
-
 const handlePaginateQuery = (req) => {
+    let page = pagination.PAGE_DEFAULT
+    let size = pagination.SIZE_DEFAULT
+    let sizeMax = pagination.SIZE_MAX
+
     if (req.query._page) {
         if (Number(req.query._page) > 0) {
             page = Number(req.query._page)

@@ -81,8 +81,9 @@ class BaseRepository {
         })
     }
 
-    handleFieldAllow(conditions, fieldAllow) {
+    handleFieldAllow(conditions, orderBy, fieldAllow) {
         let conditionsAllow = []
+        let orderByAllow = []
         if (fieldAllow.length) {
             conditionsAllow = conditions.filter((condition) => {
                 for (const field of fieldAllow) {
@@ -90,13 +91,28 @@ class BaseRepository {
                 }
                 return false
             })
+
+            orderByAllow = orderBy.filter((condition) => {
+                for (const field of fieldAllow) {
+                    if (condition[0] === field) return true
+                }
+                return false
+            })
         }
 
-        return conditionsAllow
+        return {
+            conditionsAllow,
+            orderByAllow,
+        }
     }
 
     clearQuery() {
-        this.query = {}
+        this.query = {
+            where: {},
+            order: null,
+            limit: null,
+            offset: null,
+        }
     }
 
     async findAndPaginate(
@@ -106,9 +122,15 @@ class BaseRepository {
         size,
         fieldAllow = [],
     ) {
-        const conditionsAllow = this.handleFieldAllow(conditions, fieldAllow)
+        console.log('page', page)
+        console.log('size', size)
+        const { conditionsAllow, orderByAllow } = this.handleFieldAllow(
+            conditions,
+            orderBy,
+            fieldAllow,
+        )
         this.handleConditions(conditionsAllow)
-        this.order(orderBy)
+        this.order(orderByAllow)
         this.take(page)
         this.limit(size)
 
