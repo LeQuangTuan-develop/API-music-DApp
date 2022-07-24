@@ -1,5 +1,6 @@
 const { Song } = require('../models')
 const elasticClient = require('../../configs/elastic-client.config')
+const ApiError = require('../../utils/apiError')
 
 class SongService {
     async createSong(data) {
