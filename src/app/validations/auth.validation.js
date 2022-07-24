@@ -24,18 +24,24 @@ const registerSchema = {
     }),
 }
 
+const forgotPasswordSchema = {
+    body: Joi.object().keys({
+        email: Joi.string().required().email(),
+    }),
+}
 const googleAccountSchema = {
     body: Joi.object().keys({
         fullName: Joi.string().required(),
         email: Joi.string().required().email(),
-        googleId : Joi.string().required(),
-        avatar: Joi.string().required()
-    })
+        googleId: Joi.string().required(),
+        avatar: Joi.string().required(),
+    }),
 }
 
 module.exports = {
     loginSchema,
     refreshSchema,
     registerSchema,
+    forgotPasswordSchema,
     googleAccountSchema,
 }

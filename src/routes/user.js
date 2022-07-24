@@ -3,6 +3,8 @@ const router = express.Router()
 const UserController = require('../app/controllers/User.controller')
 const passport = require('passport')
 
+router.get('/playlist', UserController.randomPlaylist)
+
 router.get('/test', UserController.test)
 router.get(
     '/',
