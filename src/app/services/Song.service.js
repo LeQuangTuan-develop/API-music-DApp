@@ -22,7 +22,7 @@ class SongService {
             query: {
                 multi_match: {
                     query: query,
-                    fields: ['name', 'musician', 'singer', 'tone', 'hashtag'],
+                    fields: ['name', 'musician', 'singer', 'lyric', 'hashtag'],
                     fuzziness: 'AUTO',
                 },
             },
