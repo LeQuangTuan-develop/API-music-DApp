@@ -5,7 +5,7 @@ const { dataResponse } = require('../../utils/response')
 class CategoriesSongController {
     async index(req, res, next) {
         try {
-            const cates = await CategoriesService.getPage(req)
+            const cates = await CategoriesService.getSongCategories(req.query)
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, cates))
         } catch (error) {
             next(error)
@@ -15,14 +15,14 @@ class CategoriesSongController {
     async create(req, res, next) {
         try {
             const saveCateSong = await CategoriesService.createCateSong(
-                req.body
+                req.body,
             )
             res.status(httpStatus.CREATED).json(
                 dataResponse(
                     httpStatus.OK,
                     saveCateSong,
-                    'Create new cate of song successfully'
-                )
+                    'Create new cate of song successfully',
+                ),
             )
         } catch (error) {
             next(error)
@@ -37,8 +37,8 @@ class CategoriesSongController {
                 dataResponse(
                     httpStatus.OK,
                     updateCate,
-                    'Update cate successfully'
-                )
+                    'Update cate successfully',
+                ),
             )
         } catch (error) {
             next(error)
@@ -54,8 +54,8 @@ class CategoriesSongController {
                 dataResponse(
                     httpStatus.OK,
                     deleteCate,
-                    'Delete cate successfully'
-                )
+                    'Delete cate successfully',
+                ),
             )
         } catch (error) {
             next(error)
@@ -77,7 +77,7 @@ class CategoriesSongController {
             const search = req.query.q
             const result = await CategoriesService.search(search)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, result, 'search successfully')
+                dataResponse(httpStatus.OK, result, 'search successfully'),
             )
         } catch (error) {
             next(error)

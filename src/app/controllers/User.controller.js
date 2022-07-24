@@ -5,7 +5,6 @@ const playlist = require('../services/Playlist.service')
 const { UserDto, UserDtos } = require('../dtos/user.dto')
 
 class UserController {
-
     // GET users
     async index(req, res, next) {
         try {
@@ -94,25 +93,20 @@ class UserController {
         }
     }
 
-     // Get auth/random playlists
-     async randomPlaylist(req, res, next) {
-        try { 
+    // Get auth/random playlists
+    async randomPlaylist(req, res, next) {
+        try {
             // console.log('aaaa')//
             // 2 là số object muốn lấy
             const randomList = await playlist.getRandomPlaylist(2)
-            
+
             res.status(httpStatus.OK).json(
-                dataResponse(
-                    httpStatus.OK,
-                    randomList,
-                    'success'
-                )
+                dataResponse(httpStatus.OK, randomList, 'success'),
             )
         } catch (error) {
             next(error)
         }
     }
-
 }
 
 module.exports = new UserController()

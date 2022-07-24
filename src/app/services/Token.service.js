@@ -4,28 +4,28 @@ const moment = require('moment')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const { Token } = require('../models')
-const { tokenTypes } = require('../../configs/tokens')
+const { tokenTypes } = require('../../configs/tokens.config')
 const { Op } = require('sequelize')
 class TokenService {
     async generateAuthTokens(user) {
         const accessTokenExpires = moment().add(
             process.env.PASSPORT_JWT_ACCESS_EXPIRED / 60,
-            'minutes'
+            'minutes',
         )
         const accessToken = this.generateToken(
             user.username,
             accessTokenExpires,
-            tokenTypes.ACCESS
+            tokenTypes.ACCESS,
         )
 
         const refreshTokenExpires = moment().add(
             process.env.PASSPORT_JWT_REFRESH_EXPIRED / 60,
-            'minutes'
+            'minutes',
         )
         let refreshToken = this.generateToken(
             user.username,
             refreshTokenExpires,
-            tokenTypes.REFRESH
+            tokenTypes.REFRESH,
         )
         const currentToken = await this.getRefreshTokenByUserId(user._id)
         if (currentToken == null || this.checkExpireToken(currentToken)) {
@@ -66,7 +66,7 @@ class TokenService {
                         },
                     ],
                 },
-            }
+            },
         )
     }
 
@@ -123,7 +123,7 @@ class TokenService {
         ) {
             throw new ApiError(
                 httpStatus.UNAUTHORIZED,
-                ' Access Token invalid!'
+                ' Access Token invalid!',
             )
         }
         return true
@@ -138,7 +138,7 @@ class TokenService {
         ) {
             throw new ApiError(
                 httpStatus.UNAUTHORIZED,
-                'Refresh Token invalid!'
+                'Refresh Token invalid!',
             )
         }
         return true
@@ -149,7 +149,7 @@ class TokenService {
         if (Date.now() >= exp * 1000) {
             throw new ApiError(
                 httpStatus.UNAUTHORIZED,
-                'Refresh Token has been expired!'
+                'Refresh Token has been expired!',
             )
         }
         return false
