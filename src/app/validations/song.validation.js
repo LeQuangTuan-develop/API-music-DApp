@@ -8,6 +8,7 @@ const createSongSchema = {
         lyric: Joi.string().trim().required(),
         lyricRendered: Joi.array().items(
             Joi.object({
+                lyricChord:Joi.string().required(),
                 lyric: Joi.string().required(),
                 chord: Joi.string().required(),
             })
