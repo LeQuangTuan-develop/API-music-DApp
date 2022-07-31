@@ -1,12 +1,11 @@
 const httpStatus = require('http-status')
 const GenreService = require('../services/Genre.service')
 const { dataResponse } = require('../../utils/response')
-const elasticClient = require('../../configs/elastic-client')
 class GenreController {
     // GET Genres
     async index(req, res, next) {
         try {
-            const genres = await GenreService.getAllGenres()
+            const genres = await GenreService.getAllGenres(req.query)
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, genres))
         } catch (error) {
             next(error)
@@ -85,7 +84,6 @@ class GenreController {
             next(error)
         }
     }
-
 }
 
 module.exports = new GenreController()

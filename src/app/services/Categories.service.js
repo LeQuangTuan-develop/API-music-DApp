@@ -1,7 +1,6 @@
 const httpStatus = require('http-status')
 const { SongCategory } = require('../models')
 const ApiError = require('../../utils/apiError')
-const { Op } = require('sequelize')
 const SongCategoryRepository = require('../repositories/SongCategory.repository')
 class CategoriesService {
     async createCateSong(data) {
@@ -17,25 +16,15 @@ class CategoriesService {
         return saveCateSong
     }
 
-    async getPage(req) {
-        const cates = await SongCategory.findAndCountAll({
-            limit: req.query._size,
-            offset: req.query._page * req.query._size,
-        })
-
-        if (!Number.isNaN(req.query._page) && req.query._page > 0) {
-            if (req.query._page > Math.ceil(cates.count / req.query._size)) {
-                req.query._size = 0
-            }
-        }
-
-        const value = {
-            countAll: cates.count,
-            countItem: req.query._size,
-            page: req.query._page + 1,
-            data: cates.rows,
-            totalPages: Math.ceil(cates.count / req.query._size),
-        }
+    async getSongCategories(query) {
+        const fieldAllow = ['name']
+        const value = SongCategoryRepository.findAndPaginate(
+            query.conditions,
+            query.orderBy || [],
+            query._page,
+            query._size,
+            fieldAllow,
+        )
 
         return value
     }

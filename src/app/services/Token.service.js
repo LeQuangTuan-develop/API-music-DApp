@@ -4,7 +4,7 @@ const moment = require('moment')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
 const { Token } = require('../models')
-const { tokenTypes } = require('../../configs/tokens')
+const { tokenTypes } = require('../../configs/tokens.config')
 const { Op } = require('sequelize')
 class TokenService {
     async generateAuthTokens(user) {
