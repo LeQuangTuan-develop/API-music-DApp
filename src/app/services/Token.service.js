@@ -147,10 +147,7 @@ class TokenService {
     checkExpireToken(token, secretKey = process.env.PASSPORT_JWT) {
         const { exp } = jwt.decode(token, secretKey)
         if (Date.now() >= exp * 1000) {
-            throw new ApiError(
-                httpStatus.UNAUTHORIZED,
-                'Refresh Token has been expired!',
-            )
+            return true
         }
         return false
     }
