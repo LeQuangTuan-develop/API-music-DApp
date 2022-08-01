@@ -10,8 +10,8 @@ class SongController {
                 dataResponse(
                     httpStatus.OK,
                     createSong,
-                    'Create song successfully!',
-                ),
+                    'Create song successfully!'
+                )
             )
         } catch (error) {
             next(error)
@@ -22,7 +22,7 @@ class SongController {
         try {
             const hits = await SongService.searchSong(req.query.q)
             res.status(httpStatus.OK).json(
-                dataResponse(httpStatus.OK, hits, 'Search successfully!'),
+                dataResponse(httpStatus.OK, hits, 'Search successfully!')
             )
         } catch (error) {
             next(error)
@@ -44,6 +44,74 @@ class SongController {
             const id = req.params.id
             const songs = await SongService.getDetail(id)
             res.status(httpStatus.OK).json(dataResponse(httpStatus.OK, songs))
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    // PUT pending/:id
+    async updatePending(req, res, next) {
+        try {
+            const id = req.params.id
+            const updateSong = await SongService.updatePending(id)
+            res.status(httpStatus.OK).json(
+                dataResponse(
+                    httpStatus.OK,
+                    updateSong,
+                    'Update status song PENDING successfully'
+                )
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    // PUT publish/:id
+    async updatePublish(req, res, next) {
+        try {
+            const id = req.params.id
+            const updateSong = await SongService.updatePublish(id)
+            res.status(httpStatus.OK).json(
+                dataResponse(
+                    httpStatus.OK,
+                    updateSong,
+                    'Update status song PUBLISH successfully'
+                )
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    // PUT refuse/:id
+    async updateRefuse(req, res, next) {
+        try {
+            const id = req.params.id
+            const updateSong = await SongService.updateRefuse(id)
+            res.status(httpStatus.OK).json(
+                dataResponse(
+                    httpStatus.OK,
+                    updateSong,
+                    'Update status song REFUSE successfully'
+                )
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    // PUT hide/:id
+    async updateHide(req, res, next) {
+        try {
+            const id = req.params.id
+            const updateSong = await SongService.updateHide(id)
+            res.status(httpStatus.OK).json(
+                dataResponse(
+                    httpStatus.OK,
+                    updateSong,
+                    'Update status song HIDE successfully'
+                )
+            )
         } catch (error) {
             next(error)
         }
