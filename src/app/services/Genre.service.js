@@ -5,7 +5,7 @@ const GenreRepository = require('../repositories/Genre.repository')
 
 class GenreService {
     async getAllGenres(query) {
-        const fieldAllow = ['name']
+        const fieldAllow = ['name', 'createdAt']
         const value = GenreRepository.findAndPaginate(
             query.conditions,
             query.orderBy || [],

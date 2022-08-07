@@ -17,7 +17,7 @@ class CategoriesService {
     }
 
     async getSongCategories(query) {
-        const fieldAllow = ['name']
+        const fieldAllow = ['name', 'createdAt']
         const value = SongCategoryRepository.findAndPaginate(
             query.conditions,
             query.orderBy || [],
