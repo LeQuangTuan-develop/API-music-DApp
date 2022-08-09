@@ -2,6 +2,7 @@ const { Song } = require('../models')
 const elasticClient = require('../../configs/elastic-client.config')
 const ApiError = require('../../utils/apiError')
 const httpStatus = require('http-status')
+const SongRepository = require('../repositories/Song.repository')
 
 class SongService {
     async createSong(data) {
@@ -19,17 +20,18 @@ class SongService {
     }
 
     async searchSong(query) {
-        const result = await elasticClient.search({
-            index: 'song',
-            query: {
-                multi_match: {
-                    query: query,
-                    fields: ['name', 'musician', 'singer', 'lyric', 'hashtag'],
-                    fuzziness: 'AUTO',
-                },
-            },
-        })
-        return result.hits
+        // const result = await elasticClient.search({
+        //     index: 'song',
+        //     query: {
+        //         multi_match: {
+        //             query: query,
+        //             fields: ['name', 'musician', 'singer', 'lyric', 'hashtag'],
+        //             fuzziness: 'AUTO',
+        //         },
+        //     },
+        // })
+        const resultSql = await SongRepository.search(query)
+        return resultSql
     }
 
     async getAllSongs() {
