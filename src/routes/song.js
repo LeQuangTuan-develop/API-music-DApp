@@ -10,12 +10,33 @@ router.post(
     '/',
     passport.authenticate('jwt', { session: false }),
     validate(createSongSchema),
-    SongController.create,
+    SongController.create
 )
 
 router.get('/search', SongController.searchSong)
 
 router.get('/', SongController.index)
 router.get('/:id', SongController.getDetail)
+
+router.put(
+    '/pending/:id',
+    passport.authenticate('jwt', { session: false }),
+    SongController.updatePending
+)
+router.put(
+    '/publish/:id',
+    passport.authenticate('jwt', { session: false }),
+    SongController.updatePublish
+)
+router.put(
+    '/refuse/:id',
+    passport.authenticate('jwt', { session: false }),
+    SongController.updateRefuse
+)
+router.put(
+    '/hide/:id',
+    passport.authenticate('jwt', { session: false }),
+    SongController.updateHide
+)
 
 module.exports = router
